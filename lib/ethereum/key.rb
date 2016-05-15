@@ -1,5 +1,3 @@
-require 'money-tree'
-
 module Ethereum
   class Key
 
