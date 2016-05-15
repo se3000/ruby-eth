@@ -1,5 +1,5 @@
 module Ethereum
-  module Wallet
+  class Tx
 
   end
 end

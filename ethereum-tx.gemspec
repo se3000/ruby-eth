@@ -1,17 +1,17 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'ethereum/wallet/version'
+require 'ethereum/tx/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "ethereum-wallet"
-  spec.version       = Ethereum::Wallet::VERSION
+  spec.name          = "ethereum-tx"
+  spec.version       = Ethereum::Tx::VERSION
   spec.authors       = ["Steve Ellis"]
   spec.email         = ["email@steveell.is"]
 
   spec.summary       = %q{Simple API to sign Ethereum transactions.}
   spec.description   = %q{Library to build, parse, and sign Ethereum transactions.}
-  spec.homepage      = "https://github.com/se3000/ethereum-wallet"
+  spec.homepage      = "https://github.com/se3000/ethereum-tx"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
