@@ -23,5 +23,20 @@ module Ethereum
       [string].pack("H*")
     end
 
+    def base256_to_int(string)
+      string.bytes.inject do |result, byte|
+        result *= 256
+        result + byte
+      end
+    end
+
+    def v_r_s_for(signature)
+      [
+        signature[0].bytes[0],
+        Utils.base256_to_int(signature[1..32]),
+        Utils.base256_to_int(signature[33..65]),
+      ]
+    end
+
   end
 end

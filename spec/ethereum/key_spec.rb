@@ -24,8 +24,12 @@ describe Ethereum::Key, type: :model do
     let(:message) { "Hi Mom!" }
 
     it "signs a message so that the public key is recoverable" do
-      signature = key.sign message
-      expect(key.verify_signature message, signature).to be_truthy
+      10.times do
+        signature = key.sign message
+        expect(key.verify_signature message, signature).to be_truthy
+        s_value = Ethereum::Utils.v_r_s_for(signature).last
+        expect(s_value).to be < (Ethereum::SECP256K1_N/2)
+      end
     end
   end
 

@@ -18,7 +18,10 @@ module Ethereum
 
     def sign(message)
       hash = message_hash(message)
-      OpenSsl.sign_compact hash, private_hex, public_hex
+      loop do
+        signature = OpenSsl.sign_compact hash, private_hex, public_hex
+        return signature if valid_s? signature
+      end
     end
 
     def verify_signature(message, signature)
@@ -31,6 +34,11 @@ module Ethereum
 
     def message_hash(message)
       Digest::SHA256.digest message
+    end
+
+    def valid_s?(signature)
+      s_value = Utils.v_r_s_for(signature).last
+      s_value <= SECP256K1_N/2 && s_value != 0
     end
 
   end
