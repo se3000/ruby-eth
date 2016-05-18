@@ -12,8 +12,16 @@ module Ethereum
       private_key.to_hex
     end
 
+    def public_bytes
+      public_key.to_bytes
+    end
+
     def public_hex
       public_key.to_hex
+    end
+
+    def to_address
+      Utils.bin_to_hex(Utils.keccak256(public_bytes[1..-1])[-20..-1])
     end
 
     def sign(message)

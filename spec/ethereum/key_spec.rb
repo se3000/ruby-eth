@@ -62,4 +62,10 @@ describe Ethereum::Key, type: :model do
       end
     end
   end
+
+  describe "#to_address" do
+    subject { key.to_address }
+    let(:priv) { 'c3a4349f6e57cfd2cbba275e3b3d15a2e4cf00c89e067f6e05bfee25208f9cbb' }
+    it { is_expected.to eq('759b427456623a33030bbc2195439c22a8a51d25') }
+  end
 end
