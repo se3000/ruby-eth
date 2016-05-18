@@ -33,7 +33,7 @@ module Ethereum
     private
 
     def message_hash(message)
-      Digest::SHA256.digest message
+      Utils.keccak256 message
     end
 
     def valid_s?(signature)

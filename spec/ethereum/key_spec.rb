@@ -38,7 +38,7 @@ describe Ethereum::Key, type: :model do
     let(:message) { "Hi Mom!" }
 
     context "when the signature matches the public key" do
-      let(:signature) { hex_to_bin "1b9ab60357da1d9f4dbd52463142885a7f1f7f79a1119af623a7d8444a2b8eaa6aab759afdf49400fe08ab01eedee20b900753ca5a04e48ca49f491e067ca17bb5" }
+      let(:signature) { hex_to_bin "1ce2f13b4123a23a4a280ac4adcba1ffa3f3848f494dc1de440af43f677e0e01260fb4667ed117d555659b249702c8215162b3f0ee09628813a4ef83616f99f180" }
 
       it "signs a message so that the public key is recoverable" do
         expect(key.verify_signature message, signature).to be_truthy
