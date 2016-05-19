@@ -19,6 +19,8 @@ module Ethereum
       s: big_endian_int
     })
 
+    attr_reader :signature
+
     def initialize(*args)
       fields = {v: 0, r: 0, s: 0}.merge parse_field_args(args)
       fields[:to] = Utils.normalize_address(fields[:to])
@@ -28,8 +30,25 @@ module Ethereum
       check_transaction_validity
     end
 
+    def unsigned_encoded
+      RLP.encode self, sedes: Tx.exclude([:v, :r, :s])
+    end
+
+    def encoded
+      RLP.encode self
+    end
+
+    def sign(key)
+      self.signature = key.sign(unsigned_encoded)
+      self.vrs = Utils.v_r_s_for signature
+
+      self
+    end
+
 
     private
+
+    attr_writer :signature
 
     def check_transaction_validity
       if [gas_price, gas_limit, value, nonce].max > UINT_MAX
@@ -37,6 +56,12 @@ module Ethereum
       elsif gas_limit < intrinsic_gas_used
         raise InvalidTransaction, "Gas limit too low"
       end
+    end
+
+    def vrs=(vrs)
+      self.v = vrs[0]
+      self.r = vrs[1]
+      self.s = vrs[2]
     end
 
     def intrinsic_gas_used

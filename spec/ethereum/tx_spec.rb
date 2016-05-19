@@ -1,17 +1,17 @@
 describe Ethereum::Tx, type: :model do
-  describe "#initialize" do
-    let(:nonce) { rand 1_000_000 }
-    let(:gas_price) { 10_000 }
-    let(:gas_limit) { 100_000 }
-    let(:recipient) { SecureRandom.hex 20 }
-    let(:value) { 10**11 }
-    let(:data) { SecureRandom.hex }
-    let(:v) { 27 }
-    let(:r) { rand(1_000_000_000) }
-    let(:s) { rand(1_000_000_000) }
-    let(:options) { {} }
-    let(:tx) { Ethereum::Tx.new(nonce, gas_price, gas_limit, recipient, value, data, v, r, s, options) }
+  let(:nonce) { rand 1_000_000 }
+  let(:gas_price) { 10_000 }
+  let(:gas_limit) { 100_000 }
+  let(:recipient) { SecureRandom.hex 20 }
+  let(:value) { 10**11 }
+  let(:data) { SecureRandom.hex }
+  let(:v) { 27 }
+  let(:r) { rand(1_000_000_000) }
+  let(:s) { rand(1_000_000_000) }
+  let(:options) { {} }
+  let(:tx) { Ethereum::Tx.new(nonce, gas_price, gas_limit, recipient, value, data, v, r, s, options) }
 
+  describe "#initialize" do
     it "sets the arguments in the order of serializable fields" do
       expect(tx.nonce).to eq(nonce)
       expect(tx.gas_price).to eq(gas_price)
@@ -46,6 +46,19 @@ describe Ethereum::Tx, type: :model do
       it "raises an InvalidTransaction error" do
         expect { tx }.to raise_error(Ethereum::InvalidTransaction, "Values way too high!")
       end
+    end
+  end
+
+  describe "#sign" do
+    let(:v) { nil }
+    let(:r) { nil }
+    let(:s) { nil }
+    let(:key) { Ethereum::Key.new }
+
+    it "creates a recoverable signature for the transaction" do
+      tx.sign key
+      verified = key.verify_signature tx.unsigned_encoded, tx.signature
+      expect(verified).to be_truthy
     end
   end
 end
