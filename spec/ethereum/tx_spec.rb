@@ -89,5 +89,10 @@ describe Ethereum::Tx, type: :model do
       tx2 = Ethereum::Tx.decode tx1.encoded
       expect(tx2).to eq(tx1)
     end
+
+    it "also accepts hex" do
+      tx2 = Ethereum::Tx.decode(Ethereum::Utils.bin_to_hex tx1.encoded)
+      expect(tx2).to eq(tx1)
+    end
   end
 end

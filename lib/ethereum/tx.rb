@@ -21,8 +21,9 @@ module Ethereum
 
     attr_reader :signature
 
-    def self.decode(binary)
-      deserialize RLP.decode(binary)
+    def self.decode(data)
+      data = Utils.hex_to_bin(data) if data.match(/\A\h+\Z/)
+      deserialize(RLP.decode data)
     end
 
     def initialize(*args)
