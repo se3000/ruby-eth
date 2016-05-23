@@ -61,4 +61,23 @@ describe Ethereum::Tx, type: :model do
       expect(verified).to be_truthy
     end
   end
+
+  describe "#to_h" do
+    let(:key) { Ethereum::Key.new }
+
+    before { tx.sign key }
+
+    it "returns all the same values" do
+      hash = tx.to_h
+
+      expect(hash[:nonce]).to eq(tx.nonce)
+      expect(hash[:gas_price]).to eq(tx.gas_price)
+      expect(hash[:gas_limit]).to eq(tx.gas_limit)
+      expect(hash[:to]).to eq(tx.to)
+      expect(hash[:data]).to eq(tx.data)
+      expect(hash[:v]).to eq(tx.v)
+      expect(hash[:r]).to eq(tx.r)
+      expect(hash[:s]).to eq(tx.s)
+    end
+  end
 end

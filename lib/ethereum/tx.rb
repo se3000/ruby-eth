@@ -45,6 +45,13 @@ module Ethereum
       self
     end
 
+    def to_h
+      self.class.serializable_fields.keys.inject({}) do |hash, field|
+        hash[field] = send field
+        hash
+      end
+    end
+
 
     private
 
