@@ -43,7 +43,7 @@ Then sign the transaction:
 ```
 tx.sign key
 ```
-Finally you can broadacts the raw transactin `tx.encoded`, to your Ethereum node.
+Finally you can broadacts the raw transaction `tx.encoded`, to your Ethereum node.
 
 
 ## Development
