@@ -34,6 +34,15 @@ module Ethereum
       end
     end
 
+    def int_to_base256(int)
+      bytes = []
+      while int > 0 do
+        bytes.unshift(int % 256)
+        int /= 256
+      end
+      bytes.pack('C*')
+    end
+
     def v_r_s_for(signature)
       [
         signature[0].bytes[0],
