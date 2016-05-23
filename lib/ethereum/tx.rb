@@ -21,6 +21,10 @@ module Ethereum
 
     attr_reader :signature
 
+    def self.decode(binary)
+      deserialize RLP.decode(binary)
+    end
+
     def initialize(*args)
       fields = {v: 0, r: 0, s: 0}.merge parse_field_args(args)
       fields[:to] = Utils.normalize_address(fields[:to])

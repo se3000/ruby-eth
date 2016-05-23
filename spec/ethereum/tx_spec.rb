@@ -80,4 +80,14 @@ describe Ethereum::Tx, type: :model do
       expect(hash[:s]).to eq(tx.s)
     end
   end
+
+  describe ".decode" do
+    let(:key) { Ethereum::Key.new }
+    let(:tx1) { tx.sign key }
+
+    it "returns an instance that matches the original enocded one" do
+      tx2 = Ethereum::Tx.decode tx1.encoded
+      expect(tx2).to eq(tx1)
+    end
+  end
 end
