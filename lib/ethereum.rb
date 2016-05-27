@@ -21,4 +21,8 @@ module Ethereum
   class ValidationError < StandardError; end
   class InvalidTransaction < ValidationError; end
 
+  class Tx
+    VERSION = '0.2.1'
+  end
+
 end

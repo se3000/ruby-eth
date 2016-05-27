@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'ethereum'
+require 'ethereum/tx'
 
 Gem::Specification.new do |spec|
   spec.name          = "ethereum-tx"
-  spec.version       = '0.2.0'
+  spec.version       = Ethereum::Tx::VERSION
   spec.authors       = ["Steve Ellis"]
   spec.email         = ["email@steveell.is"]
 

@@ -1,5 +1,6 @@
 #lifted from https://github.com/janx/ruby-ethereum
 #TODO: try to extract gem for common behavior
+require_relative '../ethereum'
 
 module Ethereum
   class Tx
