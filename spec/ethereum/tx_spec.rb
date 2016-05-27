@@ -49,6 +49,21 @@ describe Ethereum::Tx, type: :model do
     end
   end
 
+  describe ".decode" do
+    let(:key) { Ethereum::Key.new }
+    let(:tx1) { tx.sign key }
+
+    it "returns an instance that matches the original enocded one" do
+      tx2 = Ethereum::Tx.decode tx1.encoded
+      expect(tx2).to eq(tx1)
+    end
+
+    it "also accepts hex" do
+      tx2 = Ethereum::Tx.decode(Ethereum::Utils.bin_to_hex tx1.encoded)
+      expect(tx2).to eq(tx1)
+    end
+  end
+
   describe "#sign" do
     let(:v) { nil }
     let(:r) { nil }
@@ -79,20 +94,41 @@ describe Ethereum::Tx, type: :model do
       expect(hash[:r]).to eq(tx.r)
       expect(hash[:s]).to eq(tx.s)
     end
+
+    it "can be converted back into a transaction" do
+      tx2 = Ethereum::Tx.new(tx.to_h)
+      expect(tx2).to eq tx
+    end
   end
 
-  describe ".decode" do
+  describe "#from" do
     let(:key) { Ethereum::Key.new }
-    let(:tx1) { tx.sign key }
+    subject { tx.from }
 
-    it "returns an instance that matches the original enocded one" do
-      tx2 = Ethereum::Tx.decode tx1.encoded
-      expect(tx2).to eq(tx1)
+    context "when the signature is present" do
+      before do
+        tx.sign key
+      end
+
+      it { is_expected.to eq(key.public_hex) }
     end
 
-    it "also accepts hex" do
-      tx2 = Ethereum::Tx.decode(Ethereum::Utils.bin_to_hex tx1.encoded)
-      expect(tx2).to eq(tx1)
+    context "when the signature does NOT match" do
+      before do
+        tx.sign key
+        tx.signature = nil
+        tx.r = tx.r + 1
+      end
+
+      it { is_expected.not_to eq(key.public_hex) }
+    end
+
+    context "when the signature is NOT present" do
+      let(:v) { nil }
+      let(:r) { nil }
+      let(:s) { nil }
+
+      it { is_expected.to be_nil }
     end
   end
 end

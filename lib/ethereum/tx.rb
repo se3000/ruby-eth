@@ -19,7 +19,7 @@ module Ethereum
       s: big_endian_int
     })
 
-    attr_reader :signature
+    attr_writer :signature
 
     def self.decode(data)
       data = Utils.hex_to_bin(data) if data.match(/\A\h+\Z/)
@@ -57,10 +57,20 @@ module Ethereum
       end
     end
 
+    def from
+      return @from if @from
+      @from ||= OpenSsl.recover_compact(signature_hash, signature) if signature
+    end
+
+    def signature
+      return @signature if @signature
+      self.signature = [v, r, s].map do |integer|
+        Utils.int_to_base256 integer
+      end.join if [v, r, s].all?
+    end
+
 
     private
-
-    attr_writer :signature
 
     def check_transaction_validity
       if [gas_price, gas_limit, value, nonce].max > UINT_MAX
@@ -82,6 +92,10 @@ module Ethereum
 
       GTXCOST + GTXDATAZERO * num_zero_bytes +
         GTXDATANONZERO * num_non_zero_bytes
+    end
+
+    def signature_hash
+      Utils.keccak256 unsigned_encoded
     end
 
   end
