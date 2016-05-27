@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'ethereum/tx/version'
+require 'ethereum'
 
 Gem::Specification.new do |spec|
   spec.name          = "ethereum-tx"
-  spec.version       = Ethereum::Tx::VERSION
+  spec.version       = '0.2.0'
   spec.authors       = ["Steve Ellis"]
   spec.email         = ["email@steveell.is"]
 
@@ -19,7 +19,7 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_dependency('digest-sha3', '~> 1.1')
+  spec.add_dependency "digest-sha3", "~> 1.1"
   spec.add_dependency "ffi", "~> 1.0"
   spec.add_dependency "money-tree", "~> 0.9"
   spec.add_dependency "rlp", "~> 0.7"

@@ -7,7 +7,7 @@ A simple, light weight, library to build and sign Ethereum transactions.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'ethereum-tx', require: 'ethereum'
+gem 'ethereum-tx'
 ```
 
 And then execute:

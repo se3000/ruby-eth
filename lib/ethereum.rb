@@ -17,7 +17,6 @@ module Ethereum
   autoload :Sedes, 'ethereum/sedes'
   autoload :Tx, 'ethereum/tx'
   autoload :Utils, 'ethereum/utils'
-  autoload :VERSION, 'ethereum/version'
 
   class ValidationError < StandardError; end
   class InvalidTransaction < ValidationError; end
