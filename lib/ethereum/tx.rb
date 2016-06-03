@@ -44,6 +44,10 @@ module Ethereum
       RLP.encode self
     end
 
+    def hex
+      bin_to_hex encoded
+    end
+
     def sign(key)
       self.signature = key.sign(unsigned_encoded)
       self.vrs = Utils.v_r_s_for signature
