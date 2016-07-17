@@ -36,21 +36,21 @@ describe Ethereum::Tx, type: :model do
       let(:gas_limit) { 20_000 }
 
       it "raises an InvalidTransaction error" do
-        expect { tx }.to raise_error(Ethereum::InvalidTransaction, "Gas limit too low")
+        expect { tx }.to raise_error(Ethereum::Tx::InvalidTransaction, "Gas limit too low")
       end
     end
 
     context "there are values beyond the unsigned integer max" do
-      let(:nonce) { Ethereum::UINT_MAX + 1 }
+      let(:nonce) { Ethereum::Tx::UINT_MAX + 1 }
 
       it "raises an InvalidTransaction error" do
-        expect { tx }.to raise_error(Ethereum::InvalidTransaction, "Values way too high!")
+        expect { tx }.to raise_error(Ethereum::Tx::InvalidTransaction, "Values way too high!")
       end
     end
   end
 
   describe ".decode" do
-    let(:key) { Ethereum::Key.new }
+    let(:key) { Ethereum::Tx::Key.new }
     let(:tx1) { tx.sign key }
 
     it "returns an instance that matches the original enocded one" do
@@ -59,7 +59,7 @@ describe Ethereum::Tx, type: :model do
     end
 
     it "also accepts hex" do
-      tx2 = Ethereum::Tx.decode(Ethereum::Utils.bin_to_hex tx1.encoded)
+      tx2 = Ethereum::Tx.decode(Ethereum::Tx::Utils.bin_to_hex tx1.encoded)
       expect(tx2).to eq(tx1)
     end
   end
@@ -68,7 +68,7 @@ describe Ethereum::Tx, type: :model do
     let(:v) { nil }
     let(:r) { nil }
     let(:s) { nil }
-    let(:key) { Ethereum::Key.new }
+    let(:key) { Ethereum::Tx::Key.new }
 
     it "creates a recoverable signature for the transaction" do
       tx.sign key
@@ -78,7 +78,7 @@ describe Ethereum::Tx, type: :model do
   end
 
   describe "#to_h" do
-    let(:key) { Ethereum::Key.new }
+    let(:key) { Ethereum::Tx::Key.new }
 
     before { tx.sign key }
 
@@ -102,7 +102,7 @@ describe Ethereum::Tx, type: :model do
   end
 
   describe "#from" do
-    let(:key) { Ethereum::Key.new }
+    let(:key) { Ethereum::Tx::Key.new }
     subject { tx.from }
 
     context "when the signature is present" do

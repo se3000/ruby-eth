@@ -2,7 +2,7 @@
 # thanks to everyone there for figuring this out
 # TODO: Pull shared code out into a separate library
 
-module Ethereum
+class Ethereum::Tx
   class OpenSsl
     extend FFI::Library
 

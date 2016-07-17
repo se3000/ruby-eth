@@ -1,7 +1,7 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'ethereum/tx'
+require 'ethereum/tx/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "ethereum-tx"
@@ -20,6 +20,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "digest-sha3", "~> 1.1"
+  spec.add_dependency "ethereum-base", "0.1.2"
   spec.add_dependency "ffi", "~> 1.0"
   spec.add_dependency "money-tree", "~> 0.9"
   spec.add_dependency "rlp", "~> 0.7"

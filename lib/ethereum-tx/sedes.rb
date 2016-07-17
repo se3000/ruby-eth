@@ -1,4 +1,4 @@
-module Ethereum
+class Ethereum::Tx
   module Sedes
     include RLP::Sedes
 

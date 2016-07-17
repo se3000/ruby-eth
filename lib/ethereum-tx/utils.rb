@@ -1,4 +1,5 @@
-module Ethereum
+class Ethereum::Tx
+
   module Utils
 
     extend self
