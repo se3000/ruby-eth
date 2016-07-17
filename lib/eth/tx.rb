@@ -74,10 +74,10 @@ module Eth
     private
 
     def check_transaction_validity
-      if [gas_price, gas_limit, value, nonce].max > UINT_MAX
-        raise InvalidTransaction, "Values way too high!"
+      if [gas_price, gas_limit, value, nonce].max > Ethereum::Base::UINT_MAX
+        raise Ethereum::Base::InvalidTransaction, "Values way too high!"
       elsif gas_limit < intrinsic_gas_used
-        raise InvalidTransaction, "Gas limit too low"
+        raise Ethereum::Base::InvalidTransaction, "Gas limit too low"
       end
     end
 
@@ -88,11 +88,12 @@ module Eth
     end
 
     def intrinsic_gas_used
-      num_zero_bytes = data.count(BYTE_ZERO)
+      num_zero_bytes = data.count(Ethereum::Base::BYTE_ZERO)
       num_non_zero_bytes = data.size - num_zero_bytes
 
-      GTXCOST + GTXDATAZERO * num_zero_bytes +
-        GTXDATANONZERO * num_non_zero_bytes
+      Ethereum::Base::GTXCOST +
+        Ethereum::Base::GTXDATAZERO * num_zero_bytes +
+        Ethereum::Base::GTXDATANONZERO * num_non_zero_bytes
     end
 
     def signature_hash

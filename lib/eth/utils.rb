@@ -2,11 +2,8 @@ module Eth
 
   module Utils
 
+    extend Ethereum::Base::Utils
     extend self
-
-    def keccak256(message)
-      Digest::SHA3.new(256).digest(message)
-    end
 
     def normalize_address(address)
       if address.nil? || address == ''
