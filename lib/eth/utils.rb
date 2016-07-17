@@ -1,4 +1,4 @@
-class Ethereum::Tx
+module Eth
 
   module Utils
 

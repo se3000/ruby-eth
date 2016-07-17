@@ -1,19 +1,19 @@
-describe Ethereum::Tx::Key, type: :model do
+describe Eth::Key, type: :model do
   let(:priv) { nil }
-  subject(:key) { Ethereum::Tx::Key.new priv: priv }
+  subject(:key) { Eth::Key.new priv: priv }
 
   describe "#initialize" do
     it "returns a key with a new private key" do
-      key1 = Ethereum::Tx::Key.new
-      key2 = Ethereum::Tx::Key.new
+      key1 = Eth::Key.new
+      key2 = Eth::Key.new
 
       expect(key1.private_hex).not_to eq(key2.private_hex)
       expect(key1.public_hex).not_to eq(key2.public_hex)
     end
 
     it "regenerates an old private key" do
-      key1 = Ethereum::Tx::Key.new
-      key2 = Ethereum::Tx::Key.new priv: key1.private_hex
+      key1 = Eth::Key.new
+      key2 = Eth::Key.new priv: key1.private_hex
 
       expect(key1.private_hex).to eq(key2.private_hex)
       expect(key1.public_hex).to eq(key2.public_hex)
@@ -27,8 +27,8 @@ describe Ethereum::Tx::Key, type: :model do
       10.times do
         signature = key.sign message
         expect(key.verify_signature message, signature).to be_truthy
-        s_value = Ethereum::Tx::Utils.v_r_s_for(signature).last
-        expect(s_value).to be < (Ethereum::Tx::SECP256K1_N/2)
+        s_value = Eth::Utils.v_r_s_for(signature).last
+        expect(s_value).to be < (Eth::SECP256K1_N/2)
       end
     end
   end
