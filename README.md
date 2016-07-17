@@ -22,18 +22,18 @@ Or install it yourself as:
 
 ### Keys
 Create a new key:
-```
+```ruby
 key = Eth::Key.new
 ```
 Or import and existing one:
-```
+```ruby
 old_key = Eth::Key.new priv: private_key
 ```
 
 ### Transactions
 
 Build a transaction from scratch:
-```
+```ruby
 tx = Eth::Tx.new({
   data: 'abcdef',
   gas_limit: 3_141_592,
@@ -44,12 +44,12 @@ tx = Eth::Tx.new({
 })
 ```
 Or decode an encoded raw transaction:
-```
+```ruby
 tx = Eth::Tx.decode hex
 ```
 
 Then sign the transaction:
-```
+```ruby
 tx.sign key
 ```
 Get the raw transaction with `tx.hex`, and broadcast it through any Ethereum node.
