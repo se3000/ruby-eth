@@ -7,6 +7,8 @@ require 'rlp'
 module Ethereum
   class Tx
 
+    VERSION = "0.2.9"
+
     BYTE_ZERO = "\x00".freeze
     GTXCOST = 21000       # TX BASE GAS COST
     GTXDATANONZERO = 68   # TX DATA NON ZERO BYTE GAS COST
