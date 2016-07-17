@@ -1,13 +1,13 @@
-# Ethereum::Tx
+# Eth
 
-A simple, light weight, library to build and sign Ethereum transactions.
+A simple library to build and sign Ethereum transactions. Allows separataion of key and node management. Sign transactions and handle keys anywhere you can run ruby, boradcast transactions through any node.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'ethereum-tx'
+gem 'eth'
 ```
 
 And then execute:
@@ -16,38 +16,43 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install ethereum-tx
+    $ gem install eth
 
 ## Usage
 
 ### Keys
 Create a new key:
 ```
-key = Ethereum::Key.new
+key = Eth::Key.new
 ```
 Or import and existing one:
 ```
-old_key = Ethereum::Key.new private_key
+old_key = Eth::Key.new priv: private_key
 ```
 
 ### Transactions
 
 Build a transaction from scratch:
 ```
-tx = Ethereum::Tx.new to: key.address, gas_price: 25_000, gas_limit: 25_000
-tx.data = 'abcdef' #optional
-tx.value = 1_000_000_000_000 #optional
+tx = Eth::Tx.new({
+  data: 'abcdef',
+  gas_limit: 3_141_592,
+  gas_price: 20_000_000_000,
+  nonce: 0,
+  to: key.address,
+  value: 1_000_000_000_000,
+})
 ```
 Or decode an encoded raw transaction:
 ```
-tx = Ethereum::Tx.decode hex
+tx = Eth::Tx.decode hex
 ```
 
 Then sign the transaction:
 ```
 tx.sign key
 ```
-Finally you can broadcast the raw transaction, `tx.encoded`, to your Ethereum node.
+Get the raw transaction with `tx.hex`, and broadcast it through any Ethereum node.
 
 
 ## Contributing
