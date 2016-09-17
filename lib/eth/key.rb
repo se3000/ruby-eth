@@ -25,7 +25,10 @@ module Eth
     end
 
     def sign(message)
-      hash = message_hash(message)
+      sign_hash message_hash(message)
+    end
+
+    def sign_hash(hash)
       loop do
         signature = OpenSsl.sign_compact hash, private_hex, public_hex
         return signature if valid_s? signature
