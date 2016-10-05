@@ -101,6 +101,23 @@ describe Eth::Tx, type: :model do
     end
   end
 
+  describe "#hex" do
+    let(:key) { Eth::Key.new }
+
+    it "creates a hex representation" do
+      tx = Eth::Tx.new({
+        data: 'abcdef',
+        gas_limit: 3_141_592,
+        gas_price: 20_000_000_000,
+        nonce: 0,
+        to: key.address,
+        value: 1_000_000_000_000,
+      })
+
+      expect(tx.hex).not_to be_nil
+    end
+  end
+
   describe "#from" do
     let(:key) { Eth::Key.new }
     subject { tx.from }

@@ -20,7 +20,7 @@ module Eth
       public_key.to_hex
     end
 
-    def to_address
+    def address
       Utils.bin_to_hex(Utils.keccak256(public_bytes[1..-1])[-20..-1])
     end
 
