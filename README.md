@@ -52,7 +52,7 @@ Then sign the transaction:
 ```ruby
 tx.sign key
 ```
-Get the raw transaction with `tx.hex`, and broadcast it through any Ethereum node.
+Get the raw transaction with `tx.hex`, and broadcast it through any Ethereum node. Or, just get the TXID with `tx.hash`.
 
 
 ## Contributing

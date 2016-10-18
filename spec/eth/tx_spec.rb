@@ -59,7 +59,7 @@ describe Eth::Tx, type: :model do
     end
 
     it "also accepts hex" do
-      tx2 = Eth::Tx.decode(Eth::Utils.bin_to_hex tx1.encoded)
+      tx2 = Eth::Tx.decode(tx1.hex)
       expect(tx2).to eq(tx1)
     end
   end
@@ -129,6 +129,19 @@ describe Eth::Tx, type: :model do
       let(:s) { nil }
 
       it { is_expected.to be_nil }
+    end
+  end
+
+  describe "#hash" do
+    let(:txid1) { '66734e70ea28eaa28eb1bace4ca87573c48f52cca7590459ad20dc58bae1a819' }
+    let(:txid2) { '7151f5b0d229c62a5076de4133ba06fffc033e25bf99691c3e0a0a99c5a64538' }
+    let(:txids) { [txid1, txid2] }
+
+    it "hashes the serialized full transaction" do
+      txids.each do |txid|
+        tx = Eth::Tx.decode read_hex_fixture(txid)
+        expect(tx.hash).to eq(txid)
+      end
     end
   end
 end

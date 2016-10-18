@@ -41,7 +41,7 @@ module Eth
     end
 
     def hex
-      bin_to_hex encoded
+      Utils.bin_to_hex encoded
     end
 
     def sign(key)
@@ -68,6 +68,10 @@ module Eth
       self.signature = [v, r, s].map do |integer|
         Utils.int_to_base256 integer
       end.join if [v, r, s].all?
+    end
+
+    def hash
+      Utils.bin_to_hex Utils.keccak256_rlp(self)
     end
 
 
