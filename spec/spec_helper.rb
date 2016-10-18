@@ -12,6 +12,10 @@ module Helpers
     [string].pack("H*")
   end
 
+  def read_hex_fixture(name)
+    File.read("./spec/fixtures/#{name}.hex").strip
+  end
+
 end
 
 RSpec.configure do |c|

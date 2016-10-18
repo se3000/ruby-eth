@@ -70,6 +70,10 @@ module Eth
       end.join if [v, r, s].all?
     end
 
+    def hash
+      Utils.bin_to_hex Utils.keccak256_rlp(self)
+    end
+
 
     private
 
