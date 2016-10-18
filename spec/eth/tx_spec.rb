@@ -59,7 +59,7 @@ describe Eth::Tx, type: :model do
     end
 
     it "also accepts hex" do
-      tx2 = Eth::Tx.decode(Eth::Utils.bin_to_hex tx1.encoded)
+      tx2 = Eth::Tx.decode(tx1.hex)
       expect(tx2).to eq(tx1)
     end
   end

@@ -41,7 +41,7 @@ module Eth
     end
 
     def hex
-      bin_to_hex encoded
+      Utils.bin_to_hex encoded
     end
 
     def sign(key)
