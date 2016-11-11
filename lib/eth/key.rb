@@ -3,9 +3,10 @@ module Eth
 
     attr_reader :private_key, :public_key
 
-    def initialize(priv: nil)
+    def initialize(priv: nil, openssl: true)
       @private_key = MoneyTree::PrivateKey.new key: priv
       @public_key = MoneyTree::PublicKey.new private_key, compressed: false
+      @openssl = openssl
     end
 
     def private_hex
@@ -30,14 +31,16 @@ module Eth
 
     def sign_hash(hash)
       loop do
-        signature = OpenSsl.sign_compact hash, private_hex, public_hex
+        signature = (if @openssl then OpenSsl.sign_compact hash, private_hex, public_hex
+                                 else Secp256k1.sign_compact hash, private_hex end)
         return signature if valid_s? signature
       end
     end
 
     def verify_signature(message, signature)
       hash = message_hash(message)
-      public_hex == OpenSsl.recover_compact(hash, signature)
+      public_hex == (if @openssl then OpenSsl.recover_compact(hash, signature)
+                                 else Secp256k1.recover_compact(hash, signature) end)
     end
 
 
