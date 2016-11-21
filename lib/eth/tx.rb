@@ -33,7 +33,11 @@ module Eth
     end
 
     def unsigned_encoded
-      RLP.encode self, sedes: Tx.exclude([:v, :r, :s])
+      RLP.encode(unsigned, sedes: sedes)
+    end
+
+    def signing_data
+      Utils.bin_to_hex unsigned_encoded
     end
 
     def encoded
@@ -104,5 +108,19 @@ module Eth
       Utils.keccak256 unsigned_encoded
     end
 
+    def unsigned
+      Tx.new to_h.merge(v: Eth.chain_id, r: 0, s: 0)
+    end
+
+    def sedes
+      if Eth.prevent_replays? && !(Eth.replayable_v? v)
+        self.class
+      else
+        UnsignedTx
+      end
+    end
+
   end
+
+  UnsignedTx = Tx.exclude([:v, :r, :s])
 end

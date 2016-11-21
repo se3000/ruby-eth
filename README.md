@@ -48,6 +48,14 @@ Or decode an encoded raw transaction:
 tx = Eth::Tx.decode hex
 ```
 
+### Configure
+In order to prevent replay attacks, you must specify which Ethereum chain your transactions are created for. See [EIP 155](https://github.com/ethereum/EIPs/issues/155) for more detail.
+```
+Eth.configure do |config|
+  config.chain_id = 18 #defaults to 13
+end
+```
+
 Then sign the transaction:
 ```ruby
 tx.sign key
@@ -67,5 +75,4 @@ The gem is available as open source under the terms of the [MIT License](http://
 ## TODO
 - Better test suite.
 - Expose API for HD keys.
-- Separate out code pulled from [bitcoin-ruby](https://github.com/lian/bitcoin-ruby) and [ruby-ethereum](github.com/janx/ruby-ethereum) into their own gems to eliminate duplication.
 - Support signing with [libsecp256k1](https://github.com/bitcoin-core/secp256k1).
