@@ -56,13 +56,8 @@ module Eth
 
     def self.BN_num_bytes(ptr); (BN_num_bits(ptr) + 7) / 8; end
 
-    # def self.sign_compact(hash, private_key, public_key_hex = nil, pubkey_compressed = nil)
     def self.sign_compact(hash, private_key, public_key_hex)
       private_key = [private_key].pack("H*") if private_key.bytesize >= 64
-      private_key_hex = private_key.unpack("H*")[0]
-
-      # public_key_hex = regenerate_key(private_key_hex).last unless public_key_hex
-      # pubkey_compressed = (public_key_hex[0..1] == "04" ? false : true) unless pubkey_compressed
       pubkey_compressed = false
 
       init_ffi_ssl
@@ -90,7 +85,7 @@ module Eth
 
       if signature.get_array_of_pointer(0, 2).all?{|i| BN_num_bits(i) <= 256 }
         4.times{|i|
-          head = [ 27 + i + (pubkey_compressed ? 4 : 0) ].pack("C")
+          head = [ Eth.v_base + i ].pack("C")
           if public_key_hex == recover_public_key_from_signature(hash, [head, r, s].join, i, pubkey_compressed)
             rec_id = i; break
           end
@@ -107,7 +102,6 @@ module Eth
       init_ffi_ssl
 
       signature = FFI::MemoryPointer.from_string(signature)
-      #signature_bn = BN_bin2bn(signature, 65, BN_new())
       r = BN_bin2bn(signature[1], 32, BN_new())
       s = BN_bin2bn(signature[33], 32, BN_new())
 
@@ -168,14 +162,13 @@ module Eth
 
     def self.recover_compact(hash, signature)
       return false if signature.bytesize != 65
-      #i = signature.unpack("C")[0] - 27
-      #pubkey = recover_public_key_from_signature(hash, signature, (i & ~4), i >= 4)
 
       version = signature.unpack('C')[0]
-      return false if version < 27 or version > 34
+      v_base = Eth.replayable_v?(version) ? Eth.replayable_v_base : Eth.v_base
+      return false if version < v_base
 
-      compressed = (version >= 31) ? (version -= 4; true) : false
-      pubkey = recover_public_key_from_signature(hash, signature, version-27, compressed)
+      compressed = false
+      pubkey = recover_public_key_from_signature(hash, signature, (version - v_base), compressed)
     end
 
     def self.init_ffi_ssl
