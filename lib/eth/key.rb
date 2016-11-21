@@ -24,6 +24,10 @@ module Eth
       Utils.bin_to_hex(Utils.keccak256(public_bytes[1..-1])[-20..-1])
     end
 
+    def to_address
+      address
+    end
+
     def sign(message)
       sign_hash message_hash(message)
     end
