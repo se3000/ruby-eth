@@ -67,5 +67,4 @@ The gem is available as open source under the terms of the [MIT License](http://
 ## TODO
 - Better test suite.
 - Expose API for HD keys.
-- Separate out code pulled from [bitcoin-ruby](https://github.com/lian/bitcoin-ruby) and [ruby-ethereum](github.com/janx/ruby-ethereum) into their own gems to eliminate duplication.
 - Support signing with [libsecp256k1](https://github.com/bitcoin-core/secp256k1).

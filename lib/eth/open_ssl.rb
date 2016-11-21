@@ -1,6 +1,5 @@
-# lifted from https://github.com/lian/bitcoin-ruby
+# originally lifted from https://github.com/lian/bitcoin-ruby
 # thanks to everyone there for figuring this out
-# TODO: Pull shared code out into a separate library
 
 module Eth
   class OpenSsl
