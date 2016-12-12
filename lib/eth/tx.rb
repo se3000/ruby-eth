@@ -78,6 +78,14 @@ module Eth
       Utils.bin_to_hex Utils.keccak256_rlp(self)
     end
 
+    def data_hex=(string)
+      self.data = Utils.hex_to_bin(string)
+    end
+
+    def data_hex
+      Utils.bin_to_hex(data) unless data.nil?
+    end
+
 
     private
 
