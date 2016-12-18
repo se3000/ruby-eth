@@ -137,7 +137,7 @@ describe Eth::Tx, type: :model do
         tx.sign key
       end
 
-      it { is_expected.to eq(key.public_hex) }
+      it { is_expected.to eq(key.address) }
     end
 
     context "when the signature does NOT match" do
@@ -147,7 +147,7 @@ describe Eth::Tx, type: :model do
         tx.r = tx.r + 1
       end
 
-      it { is_expected.not_to eq(key.public_hex) }
+      it { is_expected.not_to eq(key.address) }
     end
 
     context "when the signature is NOT present" do

@@ -66,8 +66,10 @@ module Eth
     end
 
     def from
-      return @from if @from
-      @from ||= OpenSsl.recover_compact(signature_hash, signature) if signature
+      if signature
+        public_key = OpenSsl.recover_compact(signature_hash, signature)
+        Utils.public_key_to_address(public_key) if public_key
+      end
     end
 
     def signature
