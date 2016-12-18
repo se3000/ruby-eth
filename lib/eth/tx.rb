@@ -10,7 +10,7 @@ module Eth
       gas_limit: big_endian_int,
       to: address,
       value: big_endian_int,
-      data: binary,
+      data_bin: binary,
       v: big_endian_int,
       r: big_endian_int,
       s: big_endian_int
@@ -24,6 +24,7 @@ module Eth
     end
 
     def initialize(params)
+      params[:data_bin] ||= params[:data]
       fields = {v: 0, r: 0, s: 0}.merge params
       fields[:to] = Utils.normalize_address(fields[:to])
 
@@ -86,12 +87,12 @@ module Eth
       Utils.bin_to_hex(data) unless data.nil?
     end
 
-    def data_bin
-      data
+    def data
+      data_bin
     end
 
-    def data_bin=(binary)
-      self.data = binary
+    def data=(binary)
+      self.data_bin = binary
     end
 
 

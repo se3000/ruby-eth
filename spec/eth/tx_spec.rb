@@ -93,7 +93,7 @@ describe Eth::Tx, type: :model do
       expect(hash[:gas_price]).to eq(tx.gas_price)
       expect(hash[:gas_limit]).to eq(tx.gas_limit)
       expect(hash[:to]).to eq(tx.to)
-      expect(hash[:data]).to eq(tx.data)
+      expect(hash[:data_bin]).to eq(tx.data)
       expect(hash[:v]).to eq(tx.v)
       expect(hash[:r]).to eq(tx.r)
       expect(hash[:s]).to eq(tx.s)
