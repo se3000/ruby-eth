@@ -86,6 +86,14 @@ module Eth
       Utils.bin_to_hex(data) unless data.nil?
     end
 
+    def data_bin
+      data
+    end
+
+    def data_bin=(binary)
+      self.data = binary
+    end
+
 
     private
 

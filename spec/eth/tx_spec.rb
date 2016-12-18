@@ -179,4 +179,16 @@ describe Eth::Tx, type: :model do
       }.to(data_hex)
     end
   end
+
+  describe "#data_bin" do
+    it "returns the data in a binary format" do
+      binary = Eth::Utils.hex_to_bin '0x0123456789abcdef'
+
+      expect {
+        tx.data_bin = binary
+      }.to change {
+        tx.data
+      }.to(binary)
+    end
+  end
 end
