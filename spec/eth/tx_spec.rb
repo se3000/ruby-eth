@@ -93,10 +93,15 @@ describe Eth::Tx, type: :model do
       expect(hash[:gas_price]).to eq(tx.gas_price)
       expect(hash[:gas_limit]).to eq(tx.gas_limit)
       expect(hash[:to]).to eq(tx.to)
-      expect(hash[:data_bin]).to eq(tx.data)
+      expect(hash[:data]).to eq(tx.data)
       expect(hash[:v]).to eq(tx.v)
       expect(hash[:r]).to eq(tx.r)
       expect(hash[:s]).to eq(tx.s)
+    end
+
+    it "does not set the binary data field" do
+      hash = tx.to_h
+      expect(hash[:data_bin]).to be_nil
     end
 
     it "can be converted back into a transaction" do
@@ -167,28 +172,32 @@ describe Eth::Tx, type: :model do
   end
 
   describe "#data_hex" do
-    it "converts the binary to hex" do
-      data_hex = '0123456789abcdef'
+    it "converts the hex to binary and persists it" do
+      hex = '0123456789abcdef'
+      binary = Eth::Utils.hex_to_bin hex
 
       expect {
-        tx.data_hex = data_hex
+        tx.data = hex
       }.to change {
+        tx.data_bin
+      }.to(binary).and change {
         tx.data
-      }.to(Eth::Utils.hex_to_bin data_hex).and change {
-        tx.data_hex
-      }.to(data_hex)
+      }.to(hex)
     end
   end
 
   describe "#data_bin" do
     it "returns the data in a binary format" do
-      binary = Eth::Utils.hex_to_bin '0x0123456789abcdef'
+      hex = '0123456789abcdef'
+      binary = Eth::Utils.hex_to_bin hex
 
       expect {
         tx.data_bin = binary
       }.to change {
+        tx.data_bin
+      }.to(binary).and change {
         tx.data
-      }.to(binary)
+      }.to(hex)
     end
   end
 end

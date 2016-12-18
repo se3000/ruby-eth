@@ -24,7 +24,9 @@ module Eth
     end
 
     def initialize(params)
-      params[:data_bin] ||= params[:data]
+      if hex = (params[:data] || params['data'])
+        params[:data_bin] ||= Utils.hex_to_bin hex
+      end
       fields = {v: 0, r: 0, s: 0}.merge params
       fields[:to] = Utils.normalize_address(fields[:to])
 
@@ -57,7 +59,7 @@ module Eth
     end
 
     def to_h
-      self.class.serializable_fields.keys.inject({}) do |hash, field|
+      hash_keys.inject({}) do |hash, field|
         hash[field] = send field
         hash
       end
@@ -79,24 +81,22 @@ module Eth
       Utils.bin_to_hex Utils.keccak256_rlp(self)
     end
 
-    def data_hex=(string)
-      self.data = Utils.hex_to_bin(string)
-    end
-
-    def data_hex
-      Utils.bin_to_hex(data) unless data.nil?
-    end
-
     def data
-      data_bin
+      Utils.bin_to_hex data_bin
     end
 
-    def data=(binary)
-      self.data_bin = binary
+    def data=(hex)
+      self.data_bin = Utils.hex_to_bin(hex)
     end
 
 
     private
+
+    def hash_keys
+      keys = self.class.serializable_fields.keys
+      keys.delete(:data_bin)
+      keys + [:data]
+    end
 
     def check_transaction_validity
       if [gas_price, gas_limit, value, nonce].max > Ethereum::Base::UINT_MAX
@@ -113,8 +113,8 @@ module Eth
     end
 
     def intrinsic_gas_used
-      num_zero_bytes = data.count(Ethereum::Base::BYTE_ZERO)
-      num_non_zero_bytes = data.size - num_zero_bytes
+      num_zero_bytes = data_bin.count(Ethereum::Base::BYTE_ZERO)
+      num_non_zero_bytes = data_bin.size - num_zero_bytes
 
       Ethereum::Base::GTXCOST +
         Ethereum::Base::GTXDATAZERO * num_zero_bytes +
