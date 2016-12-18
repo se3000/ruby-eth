@@ -53,7 +53,10 @@ module Eth
 
     def sign(key)
       self.signature = key.sign(unsigned_encoded)
-      self.vrs = Utils.v_r_s_for signature
+      vrs = Utils.v_r_s_for signature
+      self.v = vrs[0]
+      self.r = vrs[1]
+      self.s = vrs[2]
 
       self
     end
@@ -106,12 +109,6 @@ module Eth
       elsif gas_limit < intrinsic_gas_used
         raise Ethereum::Base::InvalidTransaction, "Gas limit too low"
       end
-    end
-
-    def vrs=(vrs)
-      self.v = vrs[0]
-      self.r = vrs[1]
-      self.s = vrs[2]
     end
 
     def intrinsic_gas_used
