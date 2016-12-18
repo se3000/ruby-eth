@@ -49,5 +49,9 @@ module Eth
       ]
     end
 
+    def prefix_hex(hex)
+      hex.match(/\A0x/) ? hex : "0x#{hex}"
+    end
+
   end
 end
