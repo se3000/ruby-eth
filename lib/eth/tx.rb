@@ -23,8 +23,8 @@ module Eth
       deserialize(RLP.decode data)
     end
 
-    def initialize(*args)
-      fields = {v: 0, r: 0, s: 0}.merge parse_field_args(args)
+    def initialize(params)
+      fields = {v: 0, r: 0, s: 0}.merge params
       fields[:to] = Utils.normalize_address(fields[:to])
 
       serializable_initialize fields

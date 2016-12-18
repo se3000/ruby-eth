@@ -9,7 +9,19 @@ describe Eth::Tx, type: :model do
   let(:r) { rand(1_000_000_000) }
   let(:s) { rand(1_000_000_000) }
   let(:options) { {} }
-  let(:tx) { Eth::Tx.new(nonce, gas_price, gas_limit, recipient, value, data, v, r, s, options) }
+  let(:tx) do
+    Eth::Tx.new({
+      nonce: nonce,
+      gas_price: gas_price,
+      gas_limit: gas_limit,
+      to: recipient,
+      value: value,
+      data: data,
+      v: v,
+      r: r,
+      s: s,
+    })
+  end
 
   describe "#initialize" do
     it "sets the arguments in the order of serializable fields" do
@@ -22,14 +34,6 @@ describe Eth::Tx, type: :model do
       expect(tx.v).to eq(v)
       expect(tx.r).to eq(r)
       expect(tx.s).to eq(s)
-    end
-
-    context "when options are passed in" do
-      let(:options) { {value: 42}  }
-
-      it "ignores the extra options" do
-        expect(tx.value).to eq(value)
-      end
     end
 
     context "when the gas limit is too low" do
