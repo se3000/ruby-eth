@@ -30,7 +30,7 @@ describe Eth::Tx, type: :model do
       expect(tx.gas_limit).to eq(gas_limit)
       expect(tx.to).to eq(hex_to_bin recipient)
       expect(tx.value).to eq(value)
-      expect(tx.data).to eq(data)
+      expect(tx.data).to eq("0x#{data}")
       expect(tx.v).to eq(v)
       expect(tx.r).to eq(r)
       expect(tx.s).to eq(s)
@@ -106,6 +106,7 @@ describe Eth::Tx, type: :model do
 
     it "can be converted back into a transaction" do
       tx2 = Eth::Tx.new(tx.to_h)
+      expect(tx2.data).to eq tx.data
       expect(tx2).to eq tx
     end
   end
@@ -182,7 +183,7 @@ describe Eth::Tx, type: :model do
         tx.data_bin
       }.to(binary).and change {
         tx.data
-      }.to(hex)
+      }.to("0x#{hex}")
     end
   end
 
@@ -197,7 +198,7 @@ describe Eth::Tx, type: :model do
         tx.data_bin
       }.to(binary).and change {
         tx.data
-      }.to(hex)
+      }.to("0x#{hex}")
     end
   end
 end

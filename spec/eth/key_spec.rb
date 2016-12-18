@@ -100,7 +100,7 @@ describe Eth::Key, type: :model do
   describe "#address" do
     subject { key.address }
     let(:priv) { 'c3a4349f6e57cfd2cbba275e3b3d15a2e4cf00c89e067f6e05bfee25208f9cbb' }
-    it { is_expected.to eq('759b427456623a33030bbc2195439c22a8a51d25') }
+    it { is_expected.to eq('0x759b427456623a33030bbc2195439c22a8a51d25') }
     it { is_expected.to eq(key.to_address) }
   end
 end

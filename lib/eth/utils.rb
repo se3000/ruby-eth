@@ -22,7 +22,7 @@ module Eth
     end
 
     def hex_to_bin(string)
-      [string].pack("H*")
+      [string.sub(/\A0x/, '')].pack("H*")
     end
 
     def base256_to_int(string)
@@ -52,6 +52,11 @@ module Eth
     def prefix_hex(hex)
       hex.match(/\A0x/) ? hex : "0x#{hex}"
     end
+
+    def bin_to_prefixed_hex(binary)
+      prefix_hex bin_to_hex(binary)
+    end
+
 
   end
 end

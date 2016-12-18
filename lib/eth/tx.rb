@@ -19,7 +19,7 @@ module Eth
     attr_writer :signature
 
     def self.decode(data)
-      data = Utils.hex_to_bin(data) if data.match(/\A\h+\Z/)
+      data = Utils.hex_to_bin(data) if data.match(/\A(?:0x)?\h+\Z/)
       deserialize(RLP.decode data)
     end
 
@@ -40,7 +40,7 @@ module Eth
     end
 
     def signing_data
-      Utils.bin_to_hex unsigned_encoded
+      Utils.bin_to_prefixed_hex unsigned_encoded
     end
 
     def encoded
@@ -48,7 +48,7 @@ module Eth
     end
 
     def hex
-      Utils.bin_to_hex encoded
+      Utils.bin_to_prefixed_hex encoded
     end
 
     def sign(key)
@@ -82,7 +82,7 @@ module Eth
     end
 
     def data
-      Utils.bin_to_hex data_bin
+      Utils.bin_to_prefixed_hex data_bin
     end
 
     def data=(hex)
