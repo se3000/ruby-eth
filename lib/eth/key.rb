@@ -21,7 +21,7 @@ module Eth
     end
 
     def address
-      Utils.bin_to_prefixed_hex(hashed_public_key)
+      Utils.public_key_to_address public_hex
     end
     alias_method :to_address, :address
 
@@ -51,10 +51,6 @@ module Eth
     def valid_s?(signature)
       s_value = Utils.v_r_s_for(signature).last
       s_value <= Ethereum::Base::SECP256K1_N/2 && s_value != 0
-    end
-
-    def hashed_public_key
-      Utils.keccak256(public_bytes[1..-1])[-20..-1]
     end
 
   end
