@@ -23,10 +23,7 @@ module Eth
     def address
       Utils.bin_to_prefixed_hex(hashed_public_key)
     end
-
-    def to_address
-      address
-    end
+    alias_method :to_address, :address
 
     def sign(message)
       sign_hash message_hash(message)
