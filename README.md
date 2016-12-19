@@ -35,10 +35,10 @@ old_key = Eth::Key.new priv: private_key
 Build a transaction from scratch:
 ```ruby
 tx = Eth::Tx.new({
-  data: Eth::Utils.hex_to_bin(hex_data),
+  data: hex_data,
   gas_limit: 3_141_592,
   gas_price: 20_000_000_000,
-  nonce: 0,
+  nonce: 1,
   to: key.address,
   value: 1_000_000_000_000,
 })
