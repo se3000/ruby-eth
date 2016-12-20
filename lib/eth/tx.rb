@@ -89,10 +89,12 @@ module Eth
     def data
       Utils.bin_to_prefixed_hex data_bin
     end
+    alias_method :data_hex, :data
 
     def data=(hex)
       self.data_bin = Utils.hex_to_bin(hex)
     end
+    alias_method :data_hex=, :data=
 
 
     private

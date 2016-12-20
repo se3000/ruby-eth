@@ -178,11 +178,11 @@ describe Eth::Tx, type: :model do
       binary = Eth::Utils.hex_to_bin hex
 
       expect {
-        tx.data = hex
+        tx.data_hex = hex
       }.to change {
         tx.data_bin
       }.to(binary).and change {
-        tx.data
+        tx.data_hex
       }.to("0x#{hex}")
     end
   end
