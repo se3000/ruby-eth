@@ -24,12 +24,13 @@ module Eth
     end
 
     def initialize(params)
-      if hex = (params[:data] || params['data'])
-        params[:data_bin] ||= Utils.hex_to_bin hex
-      end
       fields = {v: 0, r: 0, s: 0}.merge params
       fields[:to] = Utils.normalize_address(fields[:to])
 
+      if params[:data]
+        self.data = params.delete(:data)
+        fields[:data_bin] = data_bin
+      end
       serializable_initialize fields
 
       check_transaction_validity
@@ -86,15 +87,21 @@ module Eth
       Utils.bin_to_hex Utils.keccak256_rlp(self)
     end
 
-    def data
+    def data_hex
       Utils.bin_to_prefixed_hex data_bin
     end
-    alias_method :data_hex, :data
 
-    def data=(hex)
+    def data_hex=(hex)
       self.data_bin = Utils.hex_to_bin(hex)
     end
-    alias_method :data_hex=, :data=
+
+    def data
+      Eth.tx_data_hex? ? data_hex : data_bin
+    end
+
+    def data=(string)
+      Eth.tx_data_hex? ? self.data_hex=(string) : self.data_bin=(string)
+    end
 
 
     private

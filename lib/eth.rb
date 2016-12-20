@@ -38,6 +38,10 @@ module Eth
       [replayable_v_base, replayable_v_base + 1].include? v
     end
 
+    def tx_data_hex?
+      !!configuration.tx_data_hex
+    end
+
 
     private
 
@@ -47,6 +51,10 @@ module Eth
   end
 
   class Configuration
-    attr_accessor :chain_id
+    attr_accessor :chain_id, :tx_data_hex
+
+    def initialize
+      self.tx_data_hex = true
+    end
   end
 end

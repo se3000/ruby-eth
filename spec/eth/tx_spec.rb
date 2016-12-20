@@ -51,6 +51,15 @@ describe Eth::Tx, type: :model do
         expect { tx }.to raise_error(Ethereum::Base::InvalidTransaction, "Values way too high!")
       end
     end
+
+    context "when configured to take data as binary" do
+      before { configure_tx_data_hex false }
+      let(:data) { hex_to_bin SecureRandom.hex }
+
+      it "still propperly sets the data field" do
+        expect(tx.data).to eq(data)
+      end
+    end
   end
 
   describe ".decode" do
@@ -199,6 +208,41 @@ describe Eth::Tx, type: :model do
       }.to(binary).and change {
         tx.data
       }.to("0x#{hex}")
+    end
+  end
+
+  describe "#data" do
+    after { configure_tx_data_hex }
+
+    let(:hex) { '0123456789abcdef' }
+    let(:binary) { Eth::Utils.hex_to_bin hex }
+
+    context "when configured to use hex" do
+      before { configure_tx_data_hex true }
+
+      it "accepts hex" do
+        expect {
+          tx.data = hex
+        }.to change {
+          tx.data_bin
+        }.to(binary).and change {
+          tx.data_hex
+        }.to("0x#{hex}")
+      end
+    end
+
+    context "when configured to use binary" do
+      before { configure_tx_data_hex false }
+
+      it "converts the hex to binary and persists it" do
+        expect {
+          tx.data = binary
+        }.to change {
+          tx.data_bin
+        }.to(binary).and change {
+          tx.data_hex
+        }.to("0x#{hex}")
+      end
     end
   end
 end
