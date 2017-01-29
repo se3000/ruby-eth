@@ -1,5 +1,4 @@
 module Eth
-
   module Utils
 
     extend Ethereum::Base::Utils
@@ -22,7 +21,7 @@ module Eth
     end
 
     def hex_to_bin(string)
-      [string].pack("H*")
+      [string.sub(/\A0x/, '')].pack("H*")
     end
 
     def base256_to_int(string)
@@ -47,6 +46,28 @@ module Eth
         Utils.base256_to_int(signature[1..32]),
         Utils.base256_to_int(signature[33..65]),
       ]
+    end
+
+    def prefix_hex(hex)
+      hex.match(/\A0x/) ? hex : "0x#{hex}"
+    end
+
+    def bin_to_prefixed_hex(binary)
+      prefix_hex bin_to_hex(binary)
+    end
+
+    def public_key_to_address(hex)
+      bytes = hex_to_bin(hex)
+      address_bytes = Utils.keccak256(bytes[1..-1])[-20..-1]
+      bin_to_prefixed_hex address_bytes
+    end
+
+
+    private
+
+    def lpad(x, symbol, l)
+      return x if x.size >= l
+      symbol * (l - x.size) + x
     end
 
   end

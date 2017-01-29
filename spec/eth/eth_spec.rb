@@ -1,8 +1,8 @@
 describe Eth do
 
   describe ".configure" do
-    it "defaults to 13" do
-      expect(Eth.chain_id).to eq(13)
+    it "defaults to nil" do
+      expect(Eth.chain_id).to be_nil
     end
 
     it "allows you to configure the chain ID" do
@@ -10,7 +10,7 @@ describe Eth do
         Eth.configure { |config| config.chain_id = 42 }
       }.to change {
         Eth.chain_id
-      }.from(13).to(42)
+      }.from(nil).to(42)
     end
   end
 
@@ -24,7 +24,7 @@ describe Eth do
         Eth.configure { |config| config.chain_id = 42 }
       }.to change {
         Eth.v_base
-      }.from(27).to(85)
+      }.from(27).to(119)
     end
   end
 
@@ -56,7 +56,7 @@ describe Eth do
 
     context "when configured to the replayable chain" do
       before { configure_chain_id 13 }
-      it { is_expected.to be false }
+      it { is_expected.to be true }
     end
   end
 end

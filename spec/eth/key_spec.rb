@@ -35,7 +35,7 @@ describe Eth::Key, type: :model do
     context "when the network ID has been changed", chain_id: 42 do
       it "signs a message so that the public key is recoverable" do
         v_base = Eth.v_base
-        expect(v_base).to eq(85)
+        expect(v_base).to eq(119)
 
         10.times do
           signature = key.sign message
@@ -75,11 +75,11 @@ describe Eth::Key, type: :model do
     end
 
     context "when the network ID has been changed", chain_id: 42 do
-      let(:new_signature) { hex_to_bin '553c3a62e65504f41521112f38632309184267d254ec3aeb49d93d7339daeb9588409a3957ea4932315640797d12db4efc95ae8e122145ca3d14699005ee626e3c' }
+      let(:new_signature) { hex_to_bin '778bb9158ca2b1d64f97355839efef7564e8a960f2d8429c3001f3ecf6404fa0e83659a62ceb7f137d495d3f71dac967b6aab84ad3c06e50990df25c3caf202854' }
 
       it "can verify signatures from the new network" do
         v = Eth::Utils.v_r_s_for(new_signature).first
-        expect([85, 86]).to include v
+        expect([119, 120]).to include v
         expect(key.verify_signature message, new_signature).to be_truthy
       end
 
@@ -100,7 +100,7 @@ describe Eth::Key, type: :model do
   describe "#address" do
     subject { key.address }
     let(:priv) { 'c3a4349f6e57cfd2cbba275e3b3d15a2e4cf00c89e067f6e05bfee25208f9cbb' }
-    it { is_expected.to eq('759b427456623a33030bbc2195439c22a8a51d25') }
+    it { is_expected.to eq('0x759b427456623a33030bbc2195439c22a8a51d25') }
     it { is_expected.to eq(key.to_address) }
   end
 end

@@ -9,7 +9,19 @@ describe Eth::Tx, type: :model do
   let(:r) { rand(1_000_000_000) }
   let(:s) { rand(1_000_000_000) }
   let(:options) { {} }
-  let(:tx) { Eth::Tx.new(nonce, gas_price, gas_limit, recipient, value, data, v, r, s, options) }
+  let(:tx) do
+    Eth::Tx.new({
+      nonce: nonce,
+      gas_price: gas_price,
+      gas_limit: gas_limit,
+      to: recipient,
+      value: value,
+      data: data,
+      v: v,
+      r: r,
+      s: s,
+    })
+  end
 
   describe "#initialize" do
     it "sets the arguments in the order of serializable fields" do
@@ -18,18 +30,10 @@ describe Eth::Tx, type: :model do
       expect(tx.gas_limit).to eq(gas_limit)
       expect(tx.to).to eq(hex_to_bin recipient)
       expect(tx.value).to eq(value)
-      expect(tx.data).to eq(data)
+      expect(tx.data).to eq("0x#{data}")
       expect(tx.v).to eq(v)
       expect(tx.r).to eq(r)
       expect(tx.s).to eq(s)
-    end
-
-    context "when options are passed in" do
-      let(:options) { {value: 42}  }
-
-      it "ignores the extra options" do
-        expect(tx.value).to eq(value)
-      end
     end
 
     context "when the gas limit is too low" do
@@ -45,6 +49,15 @@ describe Eth::Tx, type: :model do
 
       it "raises an InvalidTransaction error" do
         expect { tx }.to raise_error(Ethereum::Base::InvalidTransaction, "Values way too high!")
+      end
+    end
+
+    context "when configured to take data as binary" do
+      before { configure_tx_data_hex false }
+      let(:data) { hex_to_bin SecureRandom.hex }
+
+      it "still propperly sets the data field" do
+        expect(tx.data).to eq(data)
       end
     end
   end
@@ -95,8 +108,14 @@ describe Eth::Tx, type: :model do
       expect(hash[:s]).to eq(tx.s)
     end
 
+    it "does not set the binary data field" do
+      hash = tx.to_h
+      expect(hash[:data_bin]).to be_nil
+    end
+
     it "can be converted back into a transaction" do
       tx2 = Eth::Tx.new(tx.to_h)
+      expect(tx2.data).to eq tx.data
       expect(tx2).to eq tx
     end
   end
@@ -127,7 +146,7 @@ describe Eth::Tx, type: :model do
         tx.sign key
       end
 
-      it { is_expected.to eq(key.public_hex) }
+      it { is_expected.to eq(key.address) }
     end
 
     context "when the signature does NOT match" do
@@ -137,7 +156,7 @@ describe Eth::Tx, type: :model do
         tx.r = tx.r + 1
       end
 
-      it { is_expected.not_to eq(key.public_hex) }
+      it { is_expected.not_to eq(key.address) }
     end
 
     context "when the signature is NOT present" do
@@ -158,6 +177,72 @@ describe Eth::Tx, type: :model do
       txids.each do |txid|
         tx = Eth::Tx.decode read_hex_fixture(txid)
         expect(tx.hash).to eq(txid)
+        expect(tx.id).to eq(txid)
+      end
+    end
+  end
+
+  describe "#data_hex" do
+    it "converts the hex to binary and persists it" do
+      hex = '0123456789abcdef'
+      binary = Eth::Utils.hex_to_bin hex
+
+      expect {
+        tx.data_hex = hex
+      }.to change {
+        tx.data_bin
+      }.to(binary).and change {
+        tx.data_hex
+      }.to("0x#{hex}")
+    end
+  end
+
+  describe "#data_bin" do
+    it "returns the data in a binary format" do
+      hex = '0123456789abcdef'
+      binary = Eth::Utils.hex_to_bin hex
+
+      expect {
+        tx.data_bin = binary
+      }.to change {
+        tx.data_bin
+      }.to(binary).and change {
+        tx.data
+      }.to("0x#{hex}")
+    end
+  end
+
+  describe "#data" do
+    after { configure_tx_data_hex }
+
+    let(:hex) { '0123456789abcdef' }
+    let(:binary) { Eth::Utils.hex_to_bin hex }
+
+    context "when configured to use hex" do
+      before { configure_tx_data_hex true }
+
+      it "accepts hex" do
+        expect {
+          tx.data = hex
+        }.to change {
+          tx.data_bin
+        }.to(binary).and change {
+          tx.data_hex
+        }.to("0x#{hex}")
+      end
+    end
+
+    context "when configured to use binary" do
+      before { configure_tx_data_hex false }
+
+      it "converts the hex to binary and persists it" do
+        expect {
+          tx.data = binary
+        }.to change {
+          tx.data_bin
+        }.to(binary).and change {
+          tx.data_hex
+        }.to("0x#{hex}")
       end
     end
   end

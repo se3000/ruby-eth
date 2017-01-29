@@ -163,7 +163,7 @@ module Eth
       return false if signature.bytesize != 65
 
       version = signature.unpack('C')[0]
-      v_base = Eth.replayable_v?(version) ? Eth.replayable_v_base : Eth.v_base
+      v_base = Eth.replayable_v?(version) ? Eth.replayable_chain_id : Eth.v_base
       return false if version < v_base
 
       compressed = false

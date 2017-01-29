@@ -21,12 +21,9 @@ module Eth
     end
 
     def address
-      Utils.bin_to_hex(Utils.keccak256(public_bytes[1..-1])[-20..-1])
+      Utils.public_key_to_address public_hex
     end
-
-    def to_address
-      address
-    end
+    alias_method :to_address, :address
 
     def sign(message)
       sign_hash message_hash(message)
