@@ -177,6 +177,7 @@ describe Eth::Tx, type: :model do
       txids.each do |txid|
         tx = Eth::Tx.decode read_hex_fixture(txid)
         expect(tx.hash).to eq(txid)
+        expect(tx.id).to eq(txid)
       end
     end
   end

@@ -88,6 +88,7 @@ module Eth
     def hash
       Utils.bin_to_hex Utils.keccak256_rlp(self)
     end
+    alias_method :id, :hash
 
     def data_hex
       Utils.bin_to_prefixed_hex data_bin
