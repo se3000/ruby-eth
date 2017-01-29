@@ -78,9 +78,11 @@ module Eth
 
     def signature
       return @signature if @signature
-      self.signature = [v, r, s].map do |integer|
-        Utils.int_to_base256 integer
-      end.join if [v, r, s].all?
+      self.signature = [
+        Utils.int_to_base256(v),
+        Utils.zpad_int(r),
+        Utils.zpad_int(s),
+      ].join if [v, r, s].all?
     end
 
     def hash

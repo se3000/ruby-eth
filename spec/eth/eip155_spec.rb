@@ -1,24 +1,24 @@
 describe 'EIP 155 and replay protection' do
   let(:key) { Eth::Key.new priv: '4646464646464646464646464646464646464646464646464646464646464646' }
 
-  context "EIP155 example", chain_id: 18 do
+  context "EIP155 example", chain_id: 1 do
     #via https://github.com/ethereum/EIPs/issues/155#issue-183002027
 
-    let(:hex) { 'f86c098504a817c800825208943535353535353535353535353535353535353535880de0b6b3a76400008026a019ae791bb8378a38bb83f5b930fe78a0320cec27d86e5e258c69f0fa9541eb8da02bd8e0c5bde4c0800238ce5a59d2f3ce723f1e84a62cab53d961fe3b019d19fc' }
-    let(:expected_signing_data) { 'ec098504a817c800825208943535353535353535353535353535353535353535880de0b6b3a764000080128080' }
+    let(:hex) { '0xf86c098504a817c800825208943535353535353535353535353535353535353535880de0b6b3a76400008025a006f3c7fb391722beb8ae599a899fe6fd6f6eae4b0f3df4bbc54bc3c673aa92cda0423bb70e7f851514a73a14cee940ec0acab1bab6fb274fa7b922adbdcbf08611' }
+    let(:expected_signing_data) { 'ec098504a817c800825208943535353535353535353535353535353535353535880de0b6b3a764000080018080' }
     let(:tx) { Eth::Tx.decode hex }
+    let(:signing_data) { tx.unsigned_encoded }
 
     it "decodes the transaction and recognizes the signer" do
       v_val, r_val, s_val = Eth::Utils.v_r_s_for tx.signature
-      signing_data = tx.unsigned_encoded
 
-      expect(v_val).to eq 38
-      expect(r_val).to eq 11616088462479929722209511590713166362238170772128436772837473395614974864269
-      expect(s_val).to eq 19832642777361886450959973766490059191918327598807281226090984148355472235004
-      expect(v_val).to eq(Eth.v_base + 1)
+      expect(v_val).to eq 37
+      expect(r_val).to eq 3144601148722688608716531623347812328676993065715946531989621665587339629261
+      expect(s_val).to eq 29958155393767630265145914935642492209353907522463775796041782419660953650705
 
       expect(bin_to_hex signing_data).to eq(expected_signing_data)
       expect(key.verify_signature signing_data, tx.signature).to be true
+      expect(key.address).to eq(tx.from)
     end
   end
 

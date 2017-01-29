@@ -62,5 +62,13 @@ module Eth
       bin_to_prefixed_hex address_bytes
     end
 
+
+    private
+
+    def lpad(x, symbol, l)
+      return x if x.size >= l
+      symbol * (l - x.size) + x
+    end
+
   end
 end
