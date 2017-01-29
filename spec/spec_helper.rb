@@ -13,7 +13,7 @@ module Helpers
   end
 
   def read_hex_fixture(name)
-    File.read("./spec/fixtures/#{name}.hex").strip
+    File.read("./spec/fixtures/#{name.gsub(/\A0x/, '')}.hex").strip
   end
 
   def configure_defaults

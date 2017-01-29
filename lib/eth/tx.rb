@@ -86,7 +86,7 @@ module Eth
     end
 
     def hash
-      Utils.bin_to_hex Utils.keccak256_rlp(self)
+      "0x#{Utils.bin_to_hex Utils.keccak256_rlp(self)}"
     end
     alias_method :id, :hash
 
