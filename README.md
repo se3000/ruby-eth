@@ -1,4 +1,4 @@
-# Eth
+# Eth [![Code Climate](https://codeclimate.com/github/se3000/ruby-eth/badges/gpa.svg)](https://codeclimate.com/github/se3000/ruby-eth)
 
 A simple library to build and sign Ethereum transactions. Allows separataion of key and node management. Sign transactions and handle keys anywhere you can run ruby, boradcast transactions through any node.
 
