@@ -36,10 +36,10 @@ Build a transaction from scratch:
 ```ruby
 tx = Eth::Tx.new({
   data: hex_data,
-  gas_limit: 3_141_592,
-  gas_price: 20_000_000_000,
+  gas_limit: 21_000,
+  gas_price: 3_141_592,
   nonce: 1,
-  to: key.address,
+  to: key2.address,
   value: 1_000_000_000_000,
 })
 ```
@@ -50,9 +50,9 @@ tx = Eth::Tx.decode hex
 
 ### Configure
 In order to prevent replay attacks, you must specify which Ethereum chain your transactions are created for. See [EIP 155](https://github.com/ethereum/EIPs/issues/155) for more detail.
-```
+```ruby
 Eth.configure do |config|
-  config.chain_id = 18 #defaults to 13
+  config.chain_id = 1 # nil by default, meaning valid on any chain
 end
 ```
 
@@ -65,7 +65,19 @@ Get the raw transaction with `tx.hex`, and broadcast it through any Ethereum nod
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/se3000/ethereum-tx.
+Bug reports and pull requests are welcome on GitHub at https://github.com/se3000/ethereum-tx. Tests are encouraged.
+
+### Tests
+
+First install the [Ethereum common tests](https://github.com/ethereum/tests):
+```shell
+git submodule update --init
+```
+
+Then run the associated tests:
+```shell
+rspec
+```
 
 
 ## License
