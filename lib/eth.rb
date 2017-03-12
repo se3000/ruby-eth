@@ -59,4 +59,7 @@ module Eth
       self.tx_data_hex = true
     end
   end
+
+  class ValidationError < StandardError; end
+  class InvalidTransaction < ValidationError; end
 end
