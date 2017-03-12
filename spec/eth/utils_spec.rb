@@ -64,11 +64,11 @@ describe Eth::Utils, type: :model do
   describe ".hex_to_bin" do
     it "raises an error when given invalid hex" do
       expect {
-        Eth::Utils.decode_hex('xxxx')
+        Eth::Utils.hex_to_bin('xxxx')
       }.to raise_error(TypeError)
 
       expect {
-        Eth::Utils.decode_hex("\x00\x00")
+        Eth::Utils.hex_to_bin("\x00\x00")
       }.to raise_error(TypeError)
     end
   end

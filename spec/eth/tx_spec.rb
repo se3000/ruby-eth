@@ -40,15 +40,15 @@ describe Eth::Tx, type: :model do
       let(:gas_limit) { 20_000 }
 
       it "raises an InvalidTransaction error" do
-        expect { tx }.to raise_error(Ethereum::Base::InvalidTransaction, "Gas limit too low")
+        expect { tx }.to raise_error(Eth::InvalidTransaction, "Gas limit too low")
       end
     end
 
     context "there are values beyond the unsigned integer max" do
-      let(:nonce) { Ethereum::Base::UINT_MAX + 1 }
+      let(:nonce) { Eth::UINT_MAX + 1 }
 
       it "raises an InvalidTransaction error" do
-        expect { tx }.to raise_error(Ethereum::Base::InvalidTransaction, "Values way too high!")
+        expect { tx }.to raise_error(Eth::InvalidTransaction, "Values way too high!")
       end
     end
 

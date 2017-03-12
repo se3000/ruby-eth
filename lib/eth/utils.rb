@@ -1,10 +1,6 @@
 module Eth
   module Utils
 
-    BYTE_ZERO = "\x00".freeze
-    UINT256_MAX = 2**256 - 1
-
-    extend Ethereum::Base::Utils
     extend self
 
     def normalize_address(address)
@@ -20,11 +16,11 @@ module Eth
     end
 
     def bin_to_hex(string)
-      string.unpack("H*")[0]
+      RLP::Utils.encode_hex string
     end
 
     def hex_to_bin(string)
-      [string.sub(/\A0x/, '')].pack("H*")
+      RLP::Utils.decode_hex remove_hex_prefix(string)
     end
 
     def base256_to_int(str)
@@ -110,7 +106,7 @@ module Eth
     end
 
     def encode_int(n)
-      unless n.is_a?(Integer) && n >= 0 && n <= UINT256_MAX
+      unless n.is_a?(Integer) && n >= 0 && n <= UINT_MAX
         raise ArgumentError, "Integer invalid or out of range: #{n}"
       end
 
