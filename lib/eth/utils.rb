@@ -1,7 +1,6 @@
 module Eth
   module Utils
 
-    extend Ethereum::Base::Utils
     extend self
 
     def normalize_address(address)
@@ -17,27 +16,19 @@ module Eth
     end
 
     def bin_to_hex(string)
-      string.unpack("H*")[0]
+      RLP::Utils.encode_hex string
     end
 
     def hex_to_bin(string)
-      [string.sub(/\A0x/, '')].pack("H*")
+      RLP::Utils.decode_hex remove_hex_prefix(string)
     end
 
-    def base256_to_int(string)
-      string.bytes.inject do |result, byte|
-        result *= 256
-        result + byte
-      end
+    def base256_to_int(str)
+      RLP::Sedes.big_endian_int.deserialize str.sub(/\A(\x00)+/, '')
     end
 
     def int_to_base256(int)
-      bytes = []
-      while int > 0 do
-        bytes.unshift(int % 256)
-        int /= 256
-      end
-      bytes.pack('C*')
+      RLP::Sedes.big_endian_int.serialize int
     end
 
     def v_r_s_for(signature)
@@ -52,6 +43,10 @@ module Eth
       hex.match(/\A0x/) ? hex : "0x#{hex}"
     end
 
+    def remove_hex_prefix(s)
+      s[0,2] == '0x' ? s[2..-1] : s
+    end
+
     def bin_to_prefixed_hex(binary)
       prefix_hex bin_to_hex(binary)
     end
@@ -62,12 +57,60 @@ module Eth
       bin_to_prefixed_hex address_bytes
     end
 
+    def sha256(x)
+      Digest::SHA256.digest x
+    end
+
+    def keccak256(x)
+      Digest::SHA3.new(256).digest(x)
+    end
+
+    def keccak512(x)
+      Digest::SHA3.new(512).digest(x)
+    end
+
+    def keccak256_rlp(x)
+      keccak256 RLP.encode(x)
+    end
+
+    def ripemd160(x)
+      Digest::RMD160.digest x
+    end
+
+    def hash160(x)
+      ripemd160 sha256(x)
+    end
+
+    def zpad(x, l)
+      lpad x, BYTE_ZERO, l
+    end
+
+    def zunpad(x)
+      x.sub /\A\x00+/, ''
+    end
+
+    def zpad_int(n, l=32)
+      zpad encode_int(n), l
+    end
+
+    def zpad_hex(s, l=32)
+      zpad decode_hex(s), l
+    end
+
 
     private
 
     def lpad(x, symbol, l)
       return x if x.size >= l
       symbol * (l - x.size) + x
+    end
+
+    def encode_int(n)
+      unless n.is_a?(Integer) && n >= 0 && n <= UINT_MAX
+        raise ArgumentError, "Integer invalid or out of range: #{n}"
+      end
+
+      int_to_base256 n
     end
 
   end

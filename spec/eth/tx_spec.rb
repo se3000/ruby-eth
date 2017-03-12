@@ -40,15 +40,15 @@ describe Eth::Tx, type: :model do
       let(:gas_limit) { 20_000 }
 
       it "raises an InvalidTransaction error" do
-        expect { tx }.to raise_error(Ethereum::Base::InvalidTransaction, "Gas limit too low")
+        expect { tx }.to raise_error(Eth::InvalidTransaction, "Gas limit too low")
       end
     end
 
     context "there are values beyond the unsigned integer max" do
-      let(:nonce) { Ethereum::Base::UINT_MAX + 1 }
+      let(:nonce) { Eth::UINT_MAX + 1 }
 
       it "raises an InvalidTransaction error" do
-        expect { tx }.to raise_error(Ethereum::Base::InvalidTransaction, "Values way too high!")
+        expect { tx }.to raise_error(Eth::InvalidTransaction, "Values way too high!")
       end
     end
 
@@ -169,8 +169,8 @@ describe Eth::Tx, type: :model do
   end
 
   describe "#hash" do
-    let(:txid1) { '66734e70ea28eaa28eb1bace4ca87573c48f52cca7590459ad20dc58bae1a819' }
-    let(:txid2) { '7151f5b0d229c62a5076de4133ba06fffc033e25bf99691c3e0a0a99c5a64538' }
+    let(:txid1) { '0x66734e70ea28eaa28eb1bace4ca87573c48f52cca7590459ad20dc58bae1a819' }
+    let(:txid2) { '0x7151f5b0d229c62a5076de4133ba06fffc033e25bf99691c3e0a0a99c5a64538' }
     let(:txids) { [txid1, txid2] }
 
     it "hashes the serialized full transaction" do

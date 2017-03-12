@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [Unreleased]
+
+### Changed
+- Tx#hash includes the '0x' hex prefix.
+
 ## [0.4.0]
 
 ### Added
@@ -13,7 +18,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 - Tx#data is configurable to return either hex or binary: `config.tx_data_hex = true`.
-- Tx#hash includes the '0x' hex prefix.
 - Tx#hex includes the '0x' hex prefix.
 - Key#address getter is prepended by '0x'.
 - Extract public key to address method into Utils.public_key_to_address.

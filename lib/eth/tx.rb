@@ -86,7 +86,7 @@ module Eth
     end
 
     def hash
-      Utils.bin_to_hex Utils.keccak256_rlp(self)
+      "0x#{Utils.bin_to_hex Utils.keccak256_rlp(self)}"
     end
     alias_method :id, :hash
 
@@ -116,20 +116,20 @@ module Eth
     end
 
     def check_transaction_validity
-      if [gas_price, gas_limit, value, nonce].max > Ethereum::Base::UINT_MAX
-        raise Ethereum::Base::InvalidTransaction, "Values way too high!"
+      if [gas_price, gas_limit, value, nonce].max > UINT_MAX
+        raise InvalidTransaction, "Values way too high!"
       elsif gas_limit < intrinsic_gas_used
-        raise Ethereum::Base::InvalidTransaction, "Gas limit too low"
+        raise InvalidTransaction, "Gas limit too low"
       end
     end
 
     def intrinsic_gas_used
-      num_zero_bytes = data_bin.count(Ethereum::Base::BYTE_ZERO)
+      num_zero_bytes = data_bin.count(BYTE_ZERO)
       num_non_zero_bytes = data_bin.size - num_zero_bytes
 
-      Ethereum::Base::GTXCOST +
-        Ethereum::Base::GTXDATAZERO * num_zero_bytes +
-        Ethereum::Base::GTXDATANONZERO * num_non_zero_bytes
+      Gas::GTXCOST +
+        Gas::GTXDATAZERO * num_zero_bytes +
+        Gas::GTXDATANONZERO * num_non_zero_bytes
     end
 
     def signature_hash

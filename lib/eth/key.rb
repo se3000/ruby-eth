@@ -50,7 +50,7 @@ module Eth
 
     def valid_s?(signature)
       s_value = Utils.v_r_s_for(signature).last
-      s_value <= Ethereum::Base::SECP256K1_N/2 && s_value != 0
+      s_value <= Secp256k1::N/2 && s_value != 0
     end
 
   end

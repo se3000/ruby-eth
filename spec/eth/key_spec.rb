@@ -28,7 +28,7 @@ describe Eth::Key, type: :model do
         signature = key.sign message
         expect(key.verify_signature message, signature).to be_truthy
         s_value = Eth::Utils.v_r_s_for(signature).last
-        expect(s_value).to be < (Ethereum::Base::SECP256K1_N/2)
+        expect(s_value).to be < (Eth::Secp256k1::N/2)
       end
     end
 
@@ -41,7 +41,7 @@ describe Eth::Key, type: :model do
           signature = key.sign message
           expect(key.verify_signature message, signature).to be_truthy
           v_val, r_val, s_val = Eth::Utils.v_r_s_for(signature)
-          expect(s_val).to be < (Ethereum::Base::SECP256K1_N/2)
+          expect(s_val).to be < (Eth::Secp256k1::N/2)
           expect([v_base, v_base + 1]).to include(v_val)
         end
       end

@@ -1,3 +1,5 @@
+# -*- encoding : ascii-8bit -*-
+
 describe Eth::Utils, type: :model do
   describe ".int_to_base256" do
     let(:hex) { '1c18f80381f0ef01e63617fc8eeda646bcef8dea61b34cf0aa079b48ec64e6e55d64d0398818a61bfdcf938e9aa175d16661ffa696629a6abc367a49fad3df90b8' }
@@ -7,6 +9,13 @@ describe Eth::Utils, type: :model do
     it "gets the same result back" do
       base256 = Eth::Utils.int_to_base256 int
       expect(base256).to eq(bin)
+    end
+  end
+
+  describe ".base256_to_int" do
+    it "properly converts binary to integers" do
+      expect(Eth::Utils.base256_to_int("\xff")).to eq(255)
+      expect(Eth::Utils.base256_to_int("\x00\x00\xff")).to eq(255)
     end
   end
 
@@ -29,4 +38,47 @@ describe Eth::Utils, type: :model do
       expect(Eth::Utils.public_key_to_address(pub)).to eq(address)
     end
   end
+
+  describe ".keccak256" do
+    it "properly hashes using" do
+      value = "\xc5\xd2F\x01\x86\xf7#<\x92~}\xb2\xdc\xc7\x03\xc0\xe5\x00\xb6S\xca\x82';{\xfa\xd8\x04]\x85\xa4p"
+
+      expect(value). to eq(Eth::Utils.keccak256(''))
+    end
+  end
+
+  describe ".keccak256_rlp" do
+    it "properly serializes and hashes" do
+      value1 = "V\xe8\x1f\x17\x1b\xccU\xa6\xff\x83E\xe6\x92\xc0\xf8n[H\xe0\x1b\x99l\xad\xc0\x01b/\xb5\xe3c\xb4!"
+      value2 = "_\xe7\xf9w\xe7\x1d\xba.\xa1\xa6\x8e!\x05{\xee\xbb\x9b\xe2\xac0\xc6A\n\xa3\x8dO?\xbeA\xdc\xff\xd2"
+      value3 = "\x1d\xccM\xe8\xde\xc7]z\xab\x85\xb5g\xb6\xcc\xd4\x1a\xd3\x12E\x1b\x94\x8at\x13\xf0\xa1B\xfd@\xd4\x93G"
+      value4 = "YZ\xef\x85BA8\x89\x08?\x83\x13\x88\xcfv\x10\x0f\xd8a:\x97\xaf\xb8T\xdb#z#PF89"
+
+      expect(value1).to eq Eth::Utils.keccak256_rlp('')
+      expect(value2).to eq Eth::Utils.keccak256_rlp(1)
+      expect(value3).to eq Eth::Utils.keccak256_rlp([])
+      expect(value4).to eq Eth::Utils.keccak256_rlp([1, [2,3], "4", ["5", [6]]])
+    end
+  end
+
+  describe ".hex_to_bin" do
+    it "raises an error when given invalid hex" do
+      expect {
+        Eth::Utils.hex_to_bin('xxxx')
+      }.to raise_error(TypeError)
+
+      expect {
+        Eth::Utils.hex_to_bin("\x00\x00")
+      }.to raise_error(TypeError)
+    end
+  end
+
+  describe ".ripemd160" do
+    it "properly hashes with RIPEMD-160" do
+      value = "\xc8\x1b\x94\x934 \"\x1az\xc0\x04\xa9\x02B\xd8\xb1\xd3\xe5\x07\r"
+
+      expect(value).to eq Eth::Utils.ripemd160("\x00")
+    end
+  end
+
 end
