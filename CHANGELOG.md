@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+- Add Utils.valid_address? to validate EIP55 checksums.
+
 ## [0.4.1]
 
 ### Changed

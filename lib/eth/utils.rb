@@ -97,6 +97,11 @@ module Eth
       zpad decode_hex(s), l
     end
 
+    def valid_address?(address)
+      Address.new(address).valid?
+    end
+
+
 
     private
 
