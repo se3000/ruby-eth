@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [0.4.1]
+
 ### Changed
 - Tx#hash includes the '0x' hex prefix.
 
