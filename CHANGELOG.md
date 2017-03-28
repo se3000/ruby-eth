@@ -7,7 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 ### Changed
-- Add Utils.valid_address? to validate EIP55 checksums.
+- Add Address#valid? to validate EIP55 checksums.
+- Add Address#checksummed to generate EIP55 checksums.
+- Add Utils.valid_address? to easily validate EIP55 checksums.
+- Add Utils.format_address to easily convert an address to EIP55 checksummed.
 
 ## [0.4.1]
 

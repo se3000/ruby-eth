@@ -101,6 +101,10 @@ module Eth
       Address.new(address).valid?
     end
 
+    def format_address(address)
+      Address.new(address).checksummed
+    end
+
 
 
     private

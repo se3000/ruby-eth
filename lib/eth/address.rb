@@ -2,7 +2,7 @@ module Eth
   class Address
 
     def initialize(address)
-      @address = address
+      @address = Utils.prefix_hex(address)
     end
 
     def valid?
@@ -11,6 +11,14 @@ module Eth
       else
         checksum_matches?
       end
+    end
+
+    def checksummed
+      cased = unprefixed.chars.zip(checksum.chars).map do |char, check|
+        check.match(/[0-7]/) ? char.downcase : char.upcase
+      end
+
+      Utils.prefix_hex(cased.join)
     end
 
 

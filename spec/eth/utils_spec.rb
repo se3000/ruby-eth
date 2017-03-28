@@ -81,4 +81,13 @@ describe Eth::Utils, type: :model do
     end
   end
 
+  describe ".format_address" do
+    let(:address) { "0x5AAEB6053F3E94C9B9A09F33669435E7EF1BEAED" }
+    subject { Eth::Utils.format_address address }
+
+    it "returns checksummed addresses" do
+      expect(subject).to eq("0x5aAeb6053F3E94C9b9A09f33669435E7Ef1BeAed")
+    end
+  end
+
 end
