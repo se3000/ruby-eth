@@ -31,7 +31,7 @@ describe Eth::Utils, type: :model do
   end
 
   describe ".public_key_to_addres" do
-    let(:address) { "0x8abc566c5198bc6993526db697ffe58ce4e2425a" }
+    let(:address) { "0x8ABC566c5198bc6993526DB697FFe58ce4e2425A" }
     let(:pub) { "0463a1ad6824c03f81ad6c9c224384172c67f6bfd2dbde8c4747a033629b531ae3284db3045e4e40c2b865e22a806ae7dff9264299ea8696321f689d6e134d937e" }
 
     it "turns a hex public key into a hex address" do

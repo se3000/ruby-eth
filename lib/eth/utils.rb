@@ -54,7 +54,7 @@ module Eth
     def public_key_to_address(hex)
       bytes = hex_to_bin(hex)
       address_bytes = Utils.keccak256(bytes[1..-1])[-20..-1]
-      bin_to_prefixed_hex address_bytes
+      format_address bin_to_prefixed_hex(address_bytes)
     end
 
     def sha256(x)
