@@ -54,7 +54,7 @@ module Eth
     def public_key_to_address(hex)
       bytes = hex_to_bin(hex)
       address_bytes = Utils.keccak256(bytes[1..-1])[-20..-1]
-      bin_to_prefixed_hex address_bytes
+      format_address bin_to_prefixed_hex(address_bytes)
     end
 
     def sha256(x)
@@ -96,6 +96,15 @@ module Eth
     def zpad_hex(s, l=32)
       zpad decode_hex(s), l
     end
+
+    def valid_address?(address)
+      Address.new(address).valid?
+    end
+
+    def format_address(address)
+      Address.new(address).checksummed
+    end
+
 
 
     private

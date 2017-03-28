@@ -31,7 +31,7 @@ describe Eth::Utils, type: :model do
   end
 
   describe ".public_key_to_addres" do
-    let(:address) { "0x8abc566c5198bc6993526db697ffe58ce4e2425a" }
+    let(:address) { "0x8ABC566c5198bc6993526DB697FFe58ce4e2425A" }
     let(:pub) { "0463a1ad6824c03f81ad6c9c224384172c67f6bfd2dbde8c4747a033629b531ae3284db3045e4e40c2b865e22a806ae7dff9264299ea8696321f689d6e134d937e" }
 
     it "turns a hex public key into a hex address" do
@@ -78,6 +78,15 @@ describe Eth::Utils, type: :model do
       value = "\xc8\x1b\x94\x934 \"\x1az\xc0\x04\xa9\x02B\xd8\xb1\xd3\xe5\x07\r"
 
       expect(value).to eq Eth::Utils.ripemd160("\x00")
+    end
+  end
+
+  describe ".format_address" do
+    let(:address) { "0x5AAEB6053F3E94C9B9A09F33669435E7EF1BEAED" }
+    subject { Eth::Utils.format_address address }
+
+    it "returns checksummed addresses" do
+      expect(subject).to eq("0x5aAeb6053F3E94C9b9A09f33669435E7Ef1BeAed")
     end
   end
 

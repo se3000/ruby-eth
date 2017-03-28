@@ -7,6 +7,7 @@ module Eth
   BYTE_ZERO = "\x00".freeze
   UINT_MAX = 2**256 - 1
 
+  autoload :Address, 'eth/address'
   autoload :Gas, 'eth/gas'
   autoload :Key, 'eth/key'
   autoload :OpenSsl, 'eth/open_ssl'

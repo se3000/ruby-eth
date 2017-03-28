@@ -15,7 +15,7 @@ describe "Ethereum common tests" do
 
         tx = Eth::Tx.decode json['rlp']
 
-        expect(tx.from).to eq "0x#{json['sender']}"
+        expect(tx.from.downcase).to eq "0x#{json['sender']}"
         expect(tx.v).to eq json_tx['v'].to_i(16)
         expect(tx.r).to eq json_tx['r'].to_i(16)
         expect(tx.s).to eq json_tx['s'].to_i(16)
