@@ -21,9 +21,12 @@ Or install it yourself as:
 ## Usage
 
 ### Keys
-Create a new key:
+Create a new public/private key and get its address:
 ```ruby
 key = Eth::Key.new
+key.private_hex
+key.public_hex
+key.address # EIP55 checksummed address
 ```
 Or import and existing one:
 ```ruby
@@ -48,6 +51,24 @@ Or decode an encoded raw transaction:
 tx = Eth::Tx.decode hex
 ```
 
+Then sign the transaction:
+```ruby
+tx.sign key
+```
+Get the raw transaction with `tx.hex`, and broadcast it through any Ethereum node. Or, just get the TXID with `tx.hash`.
+
+### Utils
+
+Validate an [EIP55](https://github.com/ethereum/EIPs/issues/55) checksummed address:
+```ruby
+Eth::Utils.valid_address? address
+```
+
+Or add a checksum to an existing address:
+```ruby
+Eth::Utils.valid_address? "0x4bc787699093f11316e819b5692be04a712c4e69" # => "0x4bc787699093f11316e819B5692be04A712C4E69"
+```
+
 ### Configure
 In order to prevent replay attacks, you must specify which Ethereum chain your transactions are created for. See [EIP 155](https://github.com/ethereum/EIPs/issues/155) for more detail.
 ```ruby
@@ -55,13 +76,6 @@ Eth.configure do |config|
   config.chain_id = 1 # nil by default, meaning valid on any chain
 end
 ```
-
-Then sign the transaction:
-```ruby
-tx.sign key
-```
-Get the raw transaction with `tx.hex`, and broadcast it through any Ethereum node. Or, just get the TXID with `tx.hash`.
-
 
 ## Contributing
 

@@ -6,11 +6,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [0.4.2]
+
+### Added
+- Address#valid? to validate EIP55 checksums.
+- Address#checksummed to generate EIP55 checksums.
+- Utils.valid_address? to easily validate EIP55 checksums.
+- Utils.format_address to easily convert an address to EIP55 checksummed.
+
 ### Changed
-- Add Address#valid? to validate EIP55 checksums.
-- Add Address#checksummed to generate EIP55 checksums.
-- Add Utils.valid_address? to easily validate EIP55 checksums.
-- Add Utils.format_address to easily convert an address to EIP55 checksummed.
+- Dependencies no longer include Ethereum::Base. Eth now implements those helpers directly and includes ffi, digest-sha3, and rlp directly.
+
 
 ## [0.4.1]
 
