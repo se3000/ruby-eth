@@ -66,7 +66,7 @@ Eth::Utils.valid_address? address
 
 Or add a checksum to an existing address:
 ```ruby
-Eth::Utils.valid_address? "0x4bc787699093f11316e819b5692be04a712c4e69" # => "0x4bc787699093f11316e819B5692be04A712C4E69"
+Eth::Utils.format_address "0x4bc787699093f11316e819b5692be04a712c4e69" # => "0x4bc787699093f11316e819B5692be04A712C4E69"
 ```
 
 ### Configure
