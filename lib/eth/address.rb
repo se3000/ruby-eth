@@ -6,7 +6,9 @@ module Eth
     end
 
     def valid?
-      if not_checksummed?
+      if !matches_any_format?
+        false
+      elsif not_checksummed?
         true
       else
         checksum_matches?
@@ -14,6 +16,8 @@ module Eth
     end
 
     def checksummed
+      raise "Invalid address: #{address}" unless matches_any_format?
+
       cased = unprefixed.chars.zip(checksum.chars).map do |char, check|
         check.match(/[0-7]/) ? char.downcase : char.upcase
       end
@@ -27,17 +31,7 @@ module Eth
     attr_reader :address
 
     def checksum_matches?
-      unprefixed.chars.zip(checksum.chars).each do |char, check|
-        next unless char.match(/[a-fA-F]/)
-
-        if check.match(/[0-7]/) && char.match(/[A-F]/)
-          break false
-        elsif check.match(/[89a-f]/i) && char.match(/[a-f]/)
-          break false
-        else
-          true
-        end
-      end
+      address == checksummed
     end
 
     def not_checksummed?
@@ -50,6 +44,10 @@ module Eth
 
     def all_lowercase?
       address.match(/(?:0[xX])[a-f0-9]{40}/)
+    end
+
+    def matches_any_format?
+      address.match(/\A(?:0[xX])[a-fA-F0-9]{40}\z/)
     end
 
     def checksum
