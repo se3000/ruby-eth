@@ -1,5 +1,6 @@
 module Eth
   class Key
+    autoload :Encrypter, 'eth/key/encrypter'
 
     attr_reader :private_key, :public_key
 
