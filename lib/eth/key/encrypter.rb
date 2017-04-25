@@ -4,22 +4,23 @@ class Eth::Key::Encrypter
   include Eth::Utils
 
   def self.perform(key, password, options = {})
-    new(options).perform(key, password)
+    new(key, options).perform(password)
   end
 
-  def initialize(options = {})
+  def initialize(key, options = {})
+    @key = key
     @options = options
   end
 
-  def perform(key, password)
+  def perform(password)
     derive_key password
-    encrypt hex_to_bin(key)
+    encrypt
 
     data.to_json
   end
 
   def data
-    {
+    data = {
       crypto: {
         cipher: cipher_name,
         cipherparams: {
@@ -38,6 +39,8 @@ class Eth::Key::Encrypter
       id: id,
       version: 3,
     }
+    data[:address] = address unless options[:skip_address]
+    data
   end
 
   def id
@@ -65,8 +68,8 @@ class Eth::Key::Encrypter
     @derived_key = OpenSSL::PKCS5.pbkdf2_hmac(password, salt, iterations, key_length, digest)
   end
 
-  def encrypt(key)
-    @encrypted_key = cipher.update(key) + cipher.final
+  def encrypt
+    @encrypted_key = cipher.update(hex_to_bin key) + cipher.final
   end
 
   def mac
@@ -115,6 +118,10 @@ class Eth::Key::Encrypter
     else
       SecureRandom.random_bytes(iv_length)
     end
+  end
+
+  def address
+    Eth::Key.new(priv: key).address
   end
 
 end
