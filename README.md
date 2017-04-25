@@ -28,9 +28,17 @@ key.private_hex
 key.public_hex
 key.address # EIP55 checksummed address
 ```
-Or import and existing one:
+Import an existing key:
 ```ruby
 old_key = Eth::Key.new priv: private_key
+```
+Or decrypt an [encrypted key](https://github.com/ethereum/wiki/wiki/Web3-Secret-Storage-Definition):
+```ruby
+decrypted_key = Eth::Key.decrypt File.read('./some/path.json'), 'p455w0rD'
+```
+You can also encrypt your keys for use with other ethereum libraries:
+```ruby
+encrypted_key_info = Eth::Key.encrypt key, 'p455w0rD'
 ```
 
 ### Transactions
@@ -66,7 +74,7 @@ Eth::Utils.valid_address? address
 
 Or add a checksum to an existing address:
 ```ruby
-Eth::Utils.valid_address? "0x4bc787699093f11316e819b5692be04a712c4e69" # => "0x4bc787699093f11316e819B5692be04A712C4E69"
+Eth::Utils.format_address "0x4bc787699093f11316e819b5692be04a712c4e69" # => "0x4bc787699093f11316e819B5692be04A712C4E69"
 ```
 
 ### Configure

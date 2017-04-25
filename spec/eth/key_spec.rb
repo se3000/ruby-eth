@@ -103,4 +103,20 @@ describe Eth::Key, type: :model do
     it { is_expected.to eq('0x759b427456623a33030bbC2195439C22A8a51d25') }
     it { is_expected.to eq(key.to_address) }
   end
+
+  describe ".encrypt/.decrypt" do
+    # see: https://github.com/ethereum/wiki/wiki/Web3-Secret-Storage-Definition
+
+    let(:password) { SecureRandom.base64 }
+    let(:key) { Eth::Key.new }
+
+    it "reads and writes keys in the Ethereum Secret Storage definition" do
+      encrypted = Eth::Key.encrypt key, password
+      decrypted = Eth::Key.decrypt encrypted, password
+
+      expect(key.address).to eq(decrypted.address)
+      expect(key.public_hex).to eq(decrypted.public_hex)
+      expect(key.private_hex).to eq(decrypted.private_hex)
+    end
+  end
 end
