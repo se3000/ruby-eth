@@ -5,6 +5,18 @@ module Eth
 
     attr_reader :private_key, :public_key
 
+    def self.encrypt(key, password)
+      key = new(priv: key) unless key.is_a?(Key)
+
+      Encrypter.perform key.private_hex, password
+    end
+
+    def self.decrypt(data, password)
+      priv = Decrypter.perform data, password
+      new priv: priv
+    end
+
+
     def initialize(priv: nil)
       @private_key = MoneyTree::PrivateKey.new key: priv
       @public_key = MoneyTree::PublicKey.new private_key, compressed: false

@@ -14,6 +14,7 @@ class Eth::Key::Decrypter
 
   def perform
     derive_key password
+    check_macs
     bin_to_hex decrypted_data
   end
 
@@ -24,6 +25,15 @@ class Eth::Key::Decrypter
 
   def derive_key(password)
     @key = OpenSSL::PKCS5.pbkdf2_hmac(password, salt, iterations, key_length, digest)
+  end
+
+  def check_macs
+    mac1 = keccak256(key[(key_length/2), key_length] + ciphertext)
+    mac2 = hex_to_bin crypto_data['mac']
+
+    if mac1 != mac2
+      raise "Message Authentications Codes do not match!"
+    end
   end
 
   def decrypted_data

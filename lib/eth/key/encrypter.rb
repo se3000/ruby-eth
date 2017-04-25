@@ -105,7 +105,7 @@ class Eth::Key::Encrypter
   end
 
   def salt
-    if options[:salt]
+    @salt ||= if options[:salt]
       hex_to_bin options[:salt]
     else
       SecureRandom.random_bytes(salt_length)
@@ -113,7 +113,7 @@ class Eth::Key::Encrypter
   end
 
   def iv
-    if options[:iv]
+    @iv ||= if options[:iv]
       hex_to_bin options[:iv]
     else
       SecureRandom.random_bytes(iv_length)
