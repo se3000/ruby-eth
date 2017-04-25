@@ -35,6 +35,10 @@ module Helpers
     end
   end
 
+  def read_key_fixture(path)
+    File.read "./spec/fixtures/keys/#{path}.json"
+  end
+
 end
 
 RSpec.configure do |config|
