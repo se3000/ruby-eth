@@ -45,7 +45,7 @@ class Eth::Key::Decrypter
   def cipher
     @cipher ||= OpenSSL::Cipher.new(cipher_name).tap do |cipher|
       cipher.decrypt
-      cipher.key = key
+      cipher.key = key[0, (key_length/2)]
       cipher.iv = iv
     end
   end

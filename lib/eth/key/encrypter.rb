@@ -20,7 +20,7 @@ class Eth::Key::Encrypter
   end
 
   def data
-    data = {
+    {
       crypto: {
         cipher: cipher_name,
         cipherparams: {
@@ -38,9 +38,9 @@ class Eth::Key::Encrypter
       },
       id: id,
       version: 3,
-    }
-    data[:address] = address unless options[:skip_address]
-    data
+    }.tap do |data|
+      data[:address] = address unless options[:skip_address]
+    end
   end
 
   def id
@@ -56,7 +56,7 @@ class Eth::Key::Encrypter
     @cipher ||= OpenSSL::Cipher.new(cipher_name).tap do |cipher|
       cipher.encrypt
       cipher.iv = iv
-      cipher.key = derived_key
+      cipher.key = derived_key[0, (key_length/2)]
     end
   end
 
