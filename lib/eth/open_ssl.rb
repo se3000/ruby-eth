@@ -53,130 +53,144 @@ module Eth
     attach_function :EC_POINT_set_compressed_coordinates_GFp, [:pointer, :pointer, :pointer, :int, :pointer], :int
     attach_function :i2o_ECPublicKey, [:pointer, :pointer], :uint
 
-    def self.BN_num_bytes(ptr); (BN_num_bits(ptr) + 7) / 8; end
-
-    def self.sign_compact(hash, private_key, public_key_hex)
-      private_key = [private_key].pack("H*") if private_key.bytesize >= 64
-      pubkey_compressed = false
-
-      init_ffi_ssl
-      eckey = EC_KEY_new_by_curve_name(NID_secp256k1)
-      priv_key = BN_bin2bn(private_key, private_key.bytesize, BN_new())
-
-      group, order, ctx = EC_KEY_get0_group(eckey), BN_new(), BN_CTX_new()
-      EC_GROUP_get_order(group, order, ctx)
-
-      pub_key = EC_POINT_new(group)
-      EC_POINT_mul(group, pub_key, priv_key, nil, nil, ctx)
-      EC_KEY_set_private_key(eckey, priv_key)
-      EC_KEY_set_public_key(eckey, pub_key)
-
-      signature = ECDSA_do_sign(hash, hash.bytesize, eckey)
-
-      BN_free(order)
-      BN_CTX_free(ctx)
-      EC_POINT_free(pub_key)
-      BN_free(priv_key)
-      EC_KEY_free(eckey)
-
-      buf, rec_id, head = FFI::MemoryPointer.new(:uint8, 32), nil, nil
-      r, s = signature.get_array_of_pointer(0, 2).map{|i| BN_bn2bin(i, buf); buf.read_string(BN_num_bytes(i)).rjust(32, "\x00") }
-
-      if signature.get_array_of_pointer(0, 2).all?{|i| BN_num_bits(i) <= 256 }
-        4.times{|i|
-          head = [ Eth.v_base + i ].pack("C")
-          if public_key_hex == recover_public_key_from_signature(hash, [head, r, s].join, i, pubkey_compressed)
-            rec_id = i; break
-          end
-        }
+    class << self
+      def BN_num_bytes(ptr)
+        (BN_num_bits(ptr) + 7) / 8
       end
 
-      ECDSA_SIG_free(signature)
+      def sign_compact(hash, private_key, public_key_hex)
+        private_key = [private_key].pack("H*") if private_key.bytesize >= 64
+        pubkey_compressed = false
 
-      [ head, [r,s] ].join if rec_id
-    end
+        init_ffi_ssl
+        eckey = EC_KEY_new_by_curve_name(NID_secp256k1)
+        priv_key = BN_bin2bn(private_key, private_key.bytesize, BN_new())
 
-    def self.recover_public_key_from_signature(message_hash, signature, rec_id, is_compressed)
-      return nil if rec_id < 0 or signature.bytesize != 65
-      init_ffi_ssl
+        group, order, ctx = EC_KEY_get0_group(eckey), BN_new(), BN_CTX_new()
+        EC_GROUP_get_order(group, order, ctx)
 
-      signature = FFI::MemoryPointer.from_string(signature)
-      r = BN_bin2bn(signature[1], 32, BN_new())
-      s = BN_bin2bn(signature[33], 32, BN_new())
+        pub_key = EC_POINT_new(group)
+        EC_POINT_mul(group, pub_key, priv_key, nil, nil, ctx)
+        EC_KEY_set_private_key(eckey, priv_key)
+        EC_KEY_set_public_key(eckey, pub_key)
 
-      n, i = 0, rec_id / 2
-      eckey = EC_KEY_new_by_curve_name(NID_secp256k1)
+        signature = ECDSA_do_sign(hash, hash.bytesize, eckey)
 
-      EC_KEY_set_conv_form(eckey, POINT_CONVERSION_COMPRESSED) if is_compressed
-
-      group = EC_KEY_get0_group(eckey)
-      order = BN_new()
-      EC_GROUP_get_order(group, order, nil)
-      x = BN_dup(order)
-      BN_mul_word(x, i)
-      BN_add(x, x, r)
-
-      field = BN_new()
-      EC_GROUP_get_curve_GFp(group, field, nil, nil, nil)
-
-      if BN_cmp(x, field) >= 0
-        [r, s, order, x, field].each{|i| BN_free(i) }
+        BN_free(order)
+        BN_CTX_free(ctx)
+        EC_POINT_free(pub_key)
+        BN_free(priv_key)
         EC_KEY_free(eckey)
-        return nil
+
+        buf, rec_id, head = FFI::MemoryPointer.new(:uint8, 32), nil, nil
+        r, s = signature.get_array_of_pointer(0, 2).map{|i| BN_bn2bin(i, buf); buf.read_string(BN_num_bytes(i)).rjust(32, "\x00") }
+
+        if signature.get_array_of_pointer(0, 2).all?{|i| BN_num_bits(i) <= 256 }
+          4.times{|i|
+            head = [ Eth.v_base + i ].pack("C")
+            if public_key_hex == recover_public_key_from_signature(hash, [head, r, s].join, i, pubkey_compressed)
+              rec_id = i; break
+            end
+          }
+        end
+
+        ECDSA_SIG_free(signature)
+
+        [ head, [r,s] ].join if rec_id
       end
 
-      big_r = EC_POINT_new(group)
-      EC_POINT_set_compressed_coordinates_GFp(group, big_r, x, rec_id % 2, nil)
+      def recover_public_key_from_signature(message_hash, signature, rec_id, is_compressed)
+        return nil if rec_id < 0 or signature.bytesize != 65
+        init_ffi_ssl
 
-      big_q = EC_POINT_new(group)
-      n = EC_GROUP_get_degree(group)
-      e = BN_bin2bn(message_hash, message_hash.bytesize, BN_new())
-      BN_rshift(e, e, 8 - (n & 7)) if 8 * message_hash.bytesize > n
+        signature = FFI::MemoryPointer.from_string(signature)
+        r = BN_bin2bn(signature[1], 32, BN_new())
+        s = BN_bin2bn(signature[33], 32, BN_new())
 
-      ctx = BN_CTX_new()
-      zero, rr, sor, eor = BN_new(), BN_new(), BN_new(), BN_new()
-      BN_set_word(zero, 0)
-      BN_mod_sub(e, zero, e, order, ctx)
-      BN_mod_inverse(rr, r, order, ctx)
-      BN_mod_mul(sor, s, rr, order, ctx)
-      BN_mod_mul(eor, e, rr, order, ctx)
-      EC_POINT_mul(group, big_q, eor, big_r, sor, ctx)
-      EC_KEY_set_public_key(eckey, big_q)
-      BN_CTX_free(ctx)
+        _n, i = 0, rec_id / 2
+        eckey = EC_KEY_new_by_curve_name(NID_secp256k1)
 
-      [r, s, order, x, field, e, zero, rr, sor, eor].each{|i| BN_free(i) }
-      [big_r, big_q].each{|i| EC_POINT_free(i) }
+        EC_KEY_set_conv_form(eckey, POINT_CONVERSION_COMPRESSED) if is_compressed
 
-      length = i2o_ECPublicKey(eckey, nil)
-      buf = FFI::MemoryPointer.new(:uint8, length)
-      ptr = FFI::MemoryPointer.new(:pointer).put_pointer(0, buf)
-      pub_hex = if i2o_ECPublicKey(eckey, ptr) == length
-        buf.read_string(length).unpack("H*")[0]
+        group = EC_KEY_get0_group(eckey)
+        order = BN_new()
+        EC_GROUP_get_order(group, order, nil)
+        x = BN_dup(order)
+        BN_mul_word(x, i)
+        BN_add(x, x, r)
+
+        field = BN_new()
+        EC_GROUP_get_curve_GFp(group, field, nil, nil, nil)
+
+        if BN_cmp(x, field) >= 0
+          bn_free_each r, s, order, x, field
+          EC_KEY_free(eckey)
+          return nil
+        end
+
+        big_r = EC_POINT_new(group)
+        EC_POINT_set_compressed_coordinates_GFp(group, big_r, x, rec_id % 2, nil)
+
+        big_q = EC_POINT_new(group)
+        n = EC_GROUP_get_degree(group)
+        e = BN_bin2bn(message_hash, message_hash.bytesize, BN_new())
+        BN_rshift(e, e, 8 - (n & 7)) if 8 * message_hash.bytesize > n
+
+        ctx = BN_CTX_new()
+        zero, rr, sor, eor = BN_new(), BN_new(), BN_new(), BN_new()
+        BN_set_word(zero, 0)
+        BN_mod_sub(e, zero, e, order, ctx)
+        BN_mod_inverse(rr, r, order, ctx)
+        BN_mod_mul(sor, s, rr, order, ctx)
+        BN_mod_mul(eor, e, rr, order, ctx)
+        EC_POINT_mul(group, big_q, eor, big_r, sor, ctx)
+        EC_KEY_set_public_key(eckey, big_q)
+        BN_CTX_free(ctx)
+
+        bn_free_each r, s, order, x, field, e, zero, rr, sor, eor
+        [big_r, big_q].each{|j| EC_POINT_free(j) }
+
+        recover_public_hex eckey
       end
 
-      EC_KEY_free(eckey)
+      def recover_compact(hash, signature)
+        return false if signature.bytesize != 65
 
-      pub_hex
-    end
+        version = signature.unpack('C')[0]
+        v_base = Eth.replayable_v?(version) ? Eth.replayable_chain_id : Eth.v_base
+        return false if version < v_base
 
-    def self.recover_compact(hash, signature)
-      return false if signature.bytesize != 65
+        recover_public_key_from_signature(hash, signature, (version - v_base), false)
+      end
 
-      version = signature.unpack('C')[0]
-      v_base = Eth.replayable_v?(version) ? Eth.replayable_chain_id : Eth.v_base
-      return false if version < v_base
+      def init_ffi_ssl
+        return if @ssl_loaded
+        SSL_library_init()
+        ERR_load_crypto_strings()
+        SSL_load_error_strings()
+        RAND_poll()
+        @ssl_loaded = true
+      end
 
-      compressed = false
-      pubkey = recover_public_key_from_signature(hash, signature, (version - v_base), compressed)
-    end
 
-    def self.init_ffi_ssl
-      return if @ssl_loaded
-      SSL_library_init()
-      ERR_load_crypto_strings()
-      SSL_load_error_strings()
-      RAND_poll()
-      @ssl_loaded = true
+      private
+
+      def bn_free_each(*list)
+        list.each{|j| BN_free(j) }
+      end
+
+      def recover_public_hex(eckey)
+        length = i2o_ECPublicKey(eckey, nil)
+        buf = FFI::MemoryPointer.new(:uint8, length)
+        ptr = FFI::MemoryPointer.new(:pointer).put_pointer(0, buf)
+        pub_hex = if i2o_ECPublicKey(eckey, ptr) == length
+          buf.read_string(length).unpack("H*")[0]
+        end
+
+        EC_KEY_free(eckey)
+
+        pub_hex
+      end
     end
 
   end
