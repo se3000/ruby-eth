@@ -8,7 +8,7 @@ module Eth
     if FFI::Platform.windows?
       ffi_lib 'libeay32', 'ssleay32'
     else
-      ffi_lib ['libssl.so.1.0.0', 'ssl']
+      ffi_lib ['libssl.so.1.0.0', 'libssl.so.10', 'ssl']
     end
 
     NID_secp256k1 = 714
