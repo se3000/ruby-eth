@@ -1,4 +1,5 @@
 require 'json'
+require 'scrypt'
 
 class Eth::Key::Decrypter
   include Eth::Utils
@@ -28,8 +29,8 @@ class Eth::Key::Decrypter
     when 'pbkdf2'
       @key = OpenSSL::PKCS5.pbkdf2_hmac(password, salt, iterations, key_length, digest)
     when 'scrypt'
-      print "using script...\n"
-      @key = OpenSSL::KDF.scrypt(password, salt: salt, N: n, r: r, p: p, length: key_length)
+      # OpenSSL 1.1 inclues OpenSSL::KDF.scrypt, but it is not available usually, otherwise we could do: OpenSSL::KDF.scrypt(password, salt: salt, N: n, r: r, p: p, length: key_length)
+      @key = SCrypt::Engine.scrypt(password, salt, n, r, p, key_length)
     else
       raise "Unsupported key derivation function: #{kdf}!"
     end
