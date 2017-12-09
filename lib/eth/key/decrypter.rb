@@ -24,7 +24,15 @@ class Eth::Key::Decrypter
   attr_reader :data, :key, :password
 
   def derive_key(password)
-    @key = OpenSSL::PKCS5.pbkdf2_hmac(password, salt, iterations, key_length, digest)
+    case @data['kdf']
+    when 'pbkdf2'
+      @key = OpenSSL::PKCS5.pbkdf2_hmac(password, salt, iterations, key_length, digest)
+    when 'scrypt'
+      print "using script...\n"
+      @key = OpenSSL::KDF.scrypt(password, salt: salt, N: n, r: r, p: p, length: key_length)
+    else
+      raise "Unsupported key derivation function: #{@data['kdf']}!"
+    end
   end
 
   def check_macs
@@ -73,7 +81,19 @@ class Eth::Key::Decrypter
   end
 
   def key_length
-    32
+    crypto_data['kdfparams']['dklen'].to_i
+  end
+
+  def n
+    crypto_data['kdfparams']['n'].to_i
+  end
+
+  def r
+    crypto_data['kdfparams']['r'].to_i
+  end
+
+  def p
+    crypto_data['kdfparams']['p'].to_i
   end
 
   def digest
@@ -83,5 +103,6 @@ class Eth::Key::Decrypter
   def digest_name
     "sha256"
   end
+  
 
 end
