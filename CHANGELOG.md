@@ -4,7 +4,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [Unreleased]
+## [0.4.6]
+
+### Added
+- Support scrypt private key decryption
+
+## [0.4.5]
+
+### Changed
+- Further improve Open SSL configurability
+
+## [0.4.4]
+
+### Changed
+- Support old versions of SSL to help avoid preious breaking changes
 
 ## [0.4.3]
 
