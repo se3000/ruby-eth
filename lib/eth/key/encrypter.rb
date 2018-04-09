@@ -1,4 +1,5 @@
 require 'json'
+require 'securerandom'
 
 class Eth::Key::Encrypter
   include Eth::Utils
