@@ -21,7 +21,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'digest-sha3', '~> 1.1'
   spec.add_dependency 'ffi', '~> 1.0'
-  spec.add_dependency 'money-tree', '~> 0.9'
+  spec.add_dependency 'money-tree', '~> 0.10.0'
   spec.add_dependency 'rlp', '~> 0.7.3'
   spec.add_dependency 'scrypt', '~> 3.0.5'
 
