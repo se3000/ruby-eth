@@ -90,4 +90,31 @@ describe Eth::Utils, type: :model do
     end
   end
 
+  describe ".zunpad" do
+    subject { Eth::Utils.zunpad(address) }
+
+    context "with single leading null byte" do
+      let(:address) { "\0\xc8\x1b\x94\x934 \"\x1az\xc0\x04\xa9\x02B\xd8\xb1\xd3\xe5\x07\r" }
+
+      it "returns address without leading null byte" do
+        expect(subject).to eq("\xc8\x1b\x94\x934 \"\x1az\xc0\x04\xa9\x02B\xd8\xb1\xd3\xe5\x07\r")
+      end
+    end
+
+    context "with multiple leading null bytes" do
+      let(:address) { "\0\0\xc8\x1b\x94\x934 \"\x1az\xc0\x04\xa9\x02B\xd8\xb1\xd3\xe5\x07\r" }
+
+      it "returns address without leading null bytes" do
+        expect(subject).to eq("\xc8\x1b\x94\x934 \"\x1az\xc0\x04\xa9\x02B\xd8\xb1\xd3\xe5\x07\r")
+      end
+    end
+
+    context "without leading null byte" do
+      let(:address) { "\xc8\x1b\x94\x934 \"\x1az\xc0\x04\xa9\x02B\xd8\xb1\xd3\xe5\x07\r" }
+
+      it "returns unchanged address" do
+        expect(subject).to eq("\xc8\x1b\x94\x934 \"\x1az\xc0\x04\xa9\x02B\xd8\xb1\xd3\xe5\x07\r")
+      end
+    end
+  end
 end
