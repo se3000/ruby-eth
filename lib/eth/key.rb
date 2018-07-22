@@ -16,6 +16,9 @@ module Eth
       new priv: priv
     end
 
+    def self.personal_recover(message, signature)
+      OpenSsl.recover_compact(Utils.keccak256(Utils.prefix_message(message)), signature.bytes.rotate(-1).pack('c*'))
+    end
 
     def initialize(priv: nil)
       @private_key = MoneyTree::PrivateKey.new key: priv
@@ -53,6 +56,10 @@ module Eth
     def verify_signature(message, signature)
       hash = message_hash(message)
       public_hex == OpenSsl.recover_compact(hash, signature)
+    end
+
+    def personal_sign(message)
+      sign(Utils.prefix_message(message)).bytes.rotate(1).pack('c*')
     end
 
 

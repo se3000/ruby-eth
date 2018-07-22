@@ -51,6 +51,10 @@ module Eth
       prefix_hex bin_to_hex(binary)
     end
 
+    def prefix_message(message)
+      "\x19Ethereum Signed Message:\n#{message.length}#{message}"
+    end
+
     def public_key_to_address(hex)
       bytes = hex_to_bin(hex)
       address_bytes = Utils.keccak256(bytes[1..-1])[-20..-1]
