@@ -17,7 +17,8 @@ module Eth
     end
 
     def self.personal_recover(message, signature)
-      OpenSsl.recover_compact(Utils.keccak256(Utils.prefix_message(message)), signature.bytes.rotate(-1).pack('c*'))
+      bin_signature = Utils.hex_to_bin(signature).bytes.rotate(-1).pack('c*')
+      OpenSsl.recover_compact(Utils.keccak256(Utils.prefix_message(message)), bin_signature)
     end
 
     def initialize(priv: nil)
@@ -59,7 +60,7 @@ module Eth
     end
 
     def personal_sign(message)
-      sign(Utils.prefix_message(message)).bytes.rotate(1).pack('c*')
+      Utils.bin_to_hex(sign(Utils.prefix_message(message)).bytes.rotate(1).pack('c*'))
     end
 
 

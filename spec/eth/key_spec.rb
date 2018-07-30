@@ -61,7 +61,7 @@ describe Eth::Key, type: :model do
 
   describe ".personal_recover" do
     let(:message) { "test" }
-    let(:signature) { hex_to_bin "3eb24bd327df8c2b614c3f652ec86efe13aa721daf203820241c44861a26d37f2bffc6e03e68fc4c3d8d967054c9cb230ed34339b12ef89d512b42ae5bf8c2ae1c" }
+    let(:signature) { "3eb24bd327df8c2b614c3f652ec86efe13aa721daf203820241c44861a26d37f2bffc6e03e68fc4c3d8d967054c9cb230ed34339b12ef89d512b42ae5bf8c2ae1c" }
     let(:public_hex) { "043e5b33f0080491e21f9f5f7566de59a08faabf53edbc3c32aaacc438552b25fdde531f8d1053ced090e9879cbf2b0d1c054e4b25941dab9254d2070f39418afc" }
 
     it "it can recover a public key from a signature generated with web3/metamask" do

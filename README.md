@@ -94,12 +94,16 @@ Eth::Utils.format_address "0x4bc787699093f11316e819b5692be04a712c4e69" # => "0x4
 
 ### Personal Signatures
 
-You can generate and verify web3/metamask-compatible signatures:
+You can recover public keys and generate web3/metamask-compatible signatures:
 
 ```ruby
+# Generate signature
+key.personal_sign('hello world')
+
+# Recover signature
 message = 'test'
 signature = '0x3eb24bd327df8c2b614c3f652ec86efe13aa721daf203820241c44861a26d37f2bffc6e03e68fc4c3d8d967054c9cb230ed34339b12ef89d512b42ae5bf8c2ae1c'
-Eth::Key.personal_recover(message, Eth::Utils.hex_to_bin(signature)) # => 043e5b33f0080491e21f9f5f7566de59a08faabf53edbc3c32aaacc438552b25fdde531f8d1053ced090e9879cbf2b0d1c054e4b25941dab9254d2070f39418afc
+Eth::Key.personal_recover(message, signature) # => 043e5b33f0080491e21f9f5f7566de59a08faabf53edbc3c32aaacc438552b25fdde531f8d1053ced090e9879cbf2b0d1c054e4b25941dab9254d2070f39418afc
 ```
 
 ### Configure
