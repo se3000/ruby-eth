@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.4.8]
+
+### Added
+- [@buhrmi](https://github.com/buhrmi) added Eth::Key#personal_sign.
+- [@buhrmi](https://github.com/buhrmi) added Eth::Key#personal_recover.
+
 ## [0.4.7]
 
 ### Changed
