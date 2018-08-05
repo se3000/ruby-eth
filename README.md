@@ -92,6 +92,20 @@ Or add a checksum to an existing address:
 Eth::Utils.format_address "0x4bc787699093f11316e819b5692be04a712c4e69" # => "0x4bc787699093f11316e819B5692be04A712C4E69"
 ```
 
+### Personal Signatures
+
+You can recover public keys and generate web3/metamask-compatible signatures:
+
+```ruby
+# Generate signature
+key.personal_sign('hello world')
+
+# Recover signature
+message = 'test'
+signature = '0x3eb24bd327df8c2b614c3f652ec86efe13aa721daf203820241c44861a26d37f2bffc6e03e68fc4c3d8d967054c9cb230ed34339b12ef89d512b42ae5bf8c2ae1c'
+Eth::Key.personal_recover(message, signature) # => 043e5b33f0080491e21f9f5f7566de59a08faabf53edbc3c32aaacc438552b25fdde531f8d1053ced090e9879cbf2b0d1c054e4b25941dab9254d2070f39418afc
+```
+
 ### Configure
 
 In order to prevent replay attacks, you must specify which Ethereum chain your transactions are created for. See [EIP 155](https://github.com/ethereum/EIPs/issues/155) for more detail.

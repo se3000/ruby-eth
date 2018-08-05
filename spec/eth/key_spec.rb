@@ -48,6 +48,29 @@ describe Eth::Key, type: :model do
     end
   end
 
+  describe "#personal_sign" do
+    let(:message) { "Hi Mom!" }
+
+    it "signs a message so that the public key can be recovered with personal_recover" do
+      10.times do
+        signature = key.personal_sign message
+        expect(Eth::Key.personal_recover message, signature).to eq(key.public_hex)
+      end
+    end
+  end
+
+  describe ".personal_recover" do
+    let(:message) { "test" }
+    let(:signature) { "3eb24bd327df8c2b614c3f652ec86efe13aa721daf203820241c44861a26d37f2bffc6e03e68fc4c3d8d967054c9cb230ed34339b12ef89d512b42ae5bf8c2ae1c" }
+    let(:public_hex) { "043e5b33f0080491e21f9f5f7566de59a08faabf53edbc3c32aaacc438552b25fdde531f8d1053ced090e9879cbf2b0d1c054e4b25941dab9254d2070f39418afc" }
+
+    it "it can recover a public key from a signature generated with web3/metamask" do
+      10.times do
+        expect(Eth::Key.personal_recover message, signature).to eq(public_hex)
+      end
+    end
+  end
+
   describe "#verify_signature" do
     let(:priv) { '5a37533acfa3ff9386aed01e16c0e7a79038ce05cc383e290d360b8ce9cd6fdf' }
     let(:signature) { hex_to_bin "1ce2f13b4123a23a4a280ac4adcba1ffa3f3848f494dc1de440af43f677e0e01260fb4667ed117d555659b249702c8215162b3f0ee09628813a4ef83616f99f180" }
