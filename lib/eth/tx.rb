@@ -20,13 +20,19 @@ module Eth
 
     def self.decode(data)
       data = Utils.hex_to_bin(data) if data.match(/\A(?:0x)?\h+\Z/)
-      deserialize(RLP.decode data)
+      txh = deserialize(RLP.decode data).to_h
+      
+      txh[:chain_id] = Eth.chain_id_from_signature(txh)
+
+      self.new txh
     end
 
     def initialize(params)
       fields = {v: 0, r: 0, s: 0}.merge params
       fields[:to] = Utils.normalize_address(fields[:to])
 
+      self.chain_id = (params[:chain_id]) ? params.delete(:chain_id) : Eth.default_chain_id
+      
       if params[:data]
         self.data = params.delete(:data)
         fields[:data_bin] = data_bin
@@ -37,7 +43,8 @@ module Eth
     end
 
     def unsigned_encoded
-      RLP.encode(unsigned, sedes: sedes)
+      us = unsigned
+      RLP.encode(us, sedes: us.send(:sedes))
     end
 
     def signing_data
@@ -53,12 +60,13 @@ module Eth
     end
 
     def sign(key)
-      self.signature = key.sign(unsigned_encoded)
-      vrs = Utils.v_r_s_for signature
-      self.v = vrs[0]
+      sig = key.sign(unsigned_encoded)
+      vrs = Utils.v_r_s_for sig
+      self.v = (self.chain_id) ? ((self.chain_id * 2) + vrs[0] + 8) : vrs[0]
       self.r = vrs[1]
       self.s = vrs[2]
 
+      clear_signature
       self
     end
 
@@ -70,19 +78,28 @@ module Eth
     end
 
     def from
-      if signature
-        public_key = OpenSsl.recover_compact(signature_hash, signature)
+      if ecdsa_signature
+        public_key = OpenSsl.recover_compact(signature_hash, ecdsa_signature)
         Utils.public_key_to_address(public_key) if public_key
       end
     end
 
     def signature
       return @signature if @signature
-      self.signature = [
-        Utils.int_to_base256(v),
-        Utils.zpad_int(r),
-        Utils.zpad_int(s),
-      ].join if [v, r, s].all?
+      @signature = { v: v, r: r, s: s } if [v, r, s].all? && (v > 0)
+    end
+
+    def ecdsa_signature
+      return @ecdsa_signature if @ecdsa_signature
+      
+      if [v, r, s].all? && (v > 0)
+        s_v = (self.chain_id) ? (v - (self.chain_id * 2) - 8) : v
+        @ecdsa_signature = [
+          Utils.int_to_base256(s_v),
+          Utils.zpad_int(r),
+          Utils.zpad_int(s),
+        ].join
+      end
     end
 
     def hash
@@ -106,13 +123,37 @@ module Eth
       Eth.tx_data_hex? ? self.data_hex=(string) : self.data_bin=(string)
     end
 
+    def chain_id
+      @chain_id
+    end
+
+    def chain_id=(cid)
+      if cid != @chain_id
+        self.v = 0
+        self.r = 0
+        self.s = 0
+
+        clear_signature
+      end
+      
+      @chain_id = (cid == 0) ? nil : cid
+    end
+
+    def prevent_replays?
+      !self.chain_id.nil?
+    end
 
     private
 
+    def clear_signature
+      @signature = nil
+      @ecdsa_signature = nil
+    end
+    
     def hash_keys
       keys = self.class.serializable_fields.keys
       keys.delete(:data_bin)
-      keys + [:data]
+      keys + [:data, :chain_id]
     end
 
     def check_transaction_validity
@@ -137,11 +178,11 @@ module Eth
     end
 
     def unsigned
-      Tx.new to_h.merge(v: Eth.chain_id, r: 0, s: 0)
+      Tx.new to_h.merge(v: (self.chain_id) ? self.chain_id : 0, r: 0, s: 0)
     end
 
     def sedes
-      if Eth.prevent_replays? && !(Eth.replayable_v? v)
+      if self.prevent_replays? && !(Eth.replayable_v? v)
         self.class
       else
         UnsignedTx

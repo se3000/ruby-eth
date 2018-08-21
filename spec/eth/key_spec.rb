@@ -31,21 +31,6 @@ describe Eth::Key, type: :model do
         expect(s_value).to be < (Eth::Secp256k1::N/2)
       end
     end
-
-    context "when the network ID has been changed", chain_id: 42 do
-      it "signs a message so that the public key is recoverable" do
-        v_base = Eth.v_base
-        expect(v_base).to eq(119)
-
-        10.times do
-          signature = key.sign message
-          expect(key.verify_signature message, signature).to be_truthy
-          v_val, r_val, s_val = Eth::Utils.v_r_s_for(signature)
-          expect(s_val).to be < (Eth::Secp256k1::N/2)
-          expect([v_base, v_base + 1]).to include(v_val)
-        end
-      end
-    end
   end
 
   describe "#personal_sign" do
@@ -94,28 +79,6 @@ describe Eth::Key, type: :model do
 
       it "signs a message so that the public key is recoverable" do
         expect(key.verify_signature message, signature).to be_falsy
-      end
-    end
-
-    context "when the network ID has been changed", chain_id: 42 do
-      let(:new_signature) { hex_to_bin '778bb9158ca2b1d64f97355839efef7564e8a960f2d8429c3001f3ecf6404fa0e83659a62ceb7f137d495d3f71dac967b6aab84ad3c06e50990df25c3caf202854' }
-
-      it "can verify signatures from the new network" do
-        v = Eth::Utils.v_r_s_for(new_signature).first
-        expect([119, 120]).to include v
-        expect(key.verify_signature message, new_signature).to be_truthy
-      end
-
-      it "can verify replayable signatures" do
-        v = Eth::Utils.v_r_s_for(signature).first
-        expect([27, 28]).to include v
-        expect(key.verify_signature message, signature).to be_truthy
-      end
-
-      it "cannot verify signatures from other non replayable networks" do
-        configure_chain_id 3
-
-        expect(key.verify_signature message, new_signature).to be_falsey
       end
     end
   end
