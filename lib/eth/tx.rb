@@ -44,7 +44,7 @@ module Eth
 
     def unsigned_encoded
       us = unsigned
-      RLP.encode(us, sedes: us.send(:sedes))
+      RLP.encode(us, sedes: us.sedes)
     end
 
     def signing_data
@@ -181,6 +181,8 @@ module Eth
       Tx.new to_h.merge(v: (self.chain_id) ? self.chain_id : 0, r: 0, s: 0)
     end
 
+    protected
+    
     def sedes
       if self.prevent_replays? && !(Eth.replayable_v? v)
         self.class
