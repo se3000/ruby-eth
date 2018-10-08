@@ -1,30 +1,11 @@
 describe Eth do
 
   describe ".configure" do
-    it "defaults to nil" do
-      expect(Eth.chain_id).to be_nil
-    end
-
-    it "allows you to configure the chain ID" do
-      expect {
-        Eth.configure { |config| config.chain_id = 42 }
-      }.to change {
-        Eth.chain_id
-      }.from(nil).to(42)
-    end
   end
 
   describe "#v_base" do
     it "is set to 27 by default" do
       expect(Eth.v_base).to eq(27)
-    end
-
-    it "calculates it off of the chain ID" do
-      expect {
-        Eth.configure { |config| config.chain_id = 42 }
-      }.to change {
-        Eth.v_base
-      }.from(27).to(119)
     end
   end
 
@@ -41,22 +22,19 @@ describe Eth do
     end
   end
 
-  describe "#prevent_replays?" do
-    subject { Eth.prevent_replays? }
-
-    context "when configured to the defaults" do
-      before { configure_defaults }
-      it { is_expected.to be false }
-    end
-
-    context "when configured to a new chain" do
-      before { configure_chain_id 42 }
-      it { is_expected.to be true }
-    end
-
-    context "when configured to the replayable chain" do
-      before { configure_chain_id 13 }
-      it { is_expected.to be true }
+  describe "#chain_id_from_signature" do
+    it "converts v to the correct chain ID" do
+      expect(Eth.chain_id_from_signature({ v: 27, r: 0, s: 0 })).to be_nil
+      expect(Eth.chain_id_from_signature({ v: 28, r: 0, s: 0 })).to be_nil
+      expect(Eth.chain_id_from_signature({ v: 29, r: 0, s: 0 })).to be_nil
+      expect(Eth.chain_id_from_signature({ v: 30, r: 0, s: 0 })).to be_nil
+      expect(Eth.chain_id_from_signature({ v: 36, r: 0, s: 0 })).to be_nil
+      expect(Eth.chain_id_from_signature({ v: 37, r: 0, s: 0 })).to eq(1)
+      expect(Eth.chain_id_from_signature({ v: 38, r: 0, s: 0 })).to eq(1)
+      expect(Eth.chain_id_from_signature({ v: 119, r: 0, s: 0 })).to eq(42)
+      expect(Eth.chain_id_from_signature({ v: 120, r: 0, s: 0 })).to eq(42)
+      expect(Eth.chain_id_from_signature({ v: 867, r: 0, s: 0 })).to eq(416)
+      expect(Eth.chain_id_from_signature({ v: 868, r: 0, s: 0 })).to eq(416)
     end
   end
 end

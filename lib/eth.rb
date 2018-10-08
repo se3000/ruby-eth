@@ -25,20 +25,12 @@ module Eth
       27
     end
 
-    def chain_id
-      configuration.chain_id
+    def default_chain_id
+      configuration.default_chain_id
     end
 
     def v_base
-      if chain_id
-        (chain_id * 2) + 35
-      else
-        replayable_chain_id
-      end
-    end
-
-    def prevent_replays?
-      !chain_id.nil?
+      replayable_chain_id
     end
 
     def replayable_v?(v)
@@ -49,7 +41,13 @@ module Eth
       !!configuration.tx_data_hex
     end
 
+    def chain_id_from_signature(signature)
+      return nil if Eth.replayable_v?(signature[:v])
 
+      cid = (signature[:v] - 35) / 2
+      (cid < 1) ? nil : cid
+    end
+    
     private
 
     def configuration
@@ -58,9 +56,10 @@ module Eth
   end
 
   class Configuration
-    attr_accessor :chain_id, :tx_data_hex
+    attr_accessor :default_chain_id, :tx_data_hex
 
     def initialize
+      self.default_chain_id = nil
       self.tx_data_hex = true
     end
   end
