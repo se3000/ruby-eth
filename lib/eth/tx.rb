@@ -21,7 +21,7 @@ module Eth
     def self.decode(data)
       data = Utils.hex_to_bin(data) if data.match(/\A(?:0x)?\h+\Z/)
       txh = deserialize(RLP.decode data).to_h
-      
+
       txh[:chain_id] = Eth.chain_id_from_signature(txh)
 
       self.new txh
@@ -31,8 +31,8 @@ module Eth
       fields = {v: 0, r: 0, s: 0}.merge params
       fields[:to] = Utils.normalize_address(fields[:to])
 
-      self.chain_id = (params[:chain_id]) ? params.delete(:chain_id) : Eth.default_chain_id
-      
+      self.chain_id = (params[:chain_id]) ? params.delete(:chain_id) : Eth.chain_id
+
       if params[:data]
         self.data = params.delete(:data)
         fields[:data_bin] = data_bin
@@ -91,7 +91,7 @@ module Eth
 
     def ecdsa_signature
       return @ecdsa_signature if @ecdsa_signature
-      
+
       if [v, r, s].all? && (v > 0)
         s_v = (self.chain_id) ? (v - (self.chain_id * 2) - 8) : v
         @ecdsa_signature = [
@@ -135,7 +135,7 @@ module Eth
 
         clear_signature
       end
-      
+
       @chain_id = (cid == 0) ? nil : cid
     end
 
@@ -149,7 +149,7 @@ module Eth
       @signature = nil
       @ecdsa_signature = nil
     end
-    
+
     def hash_keys
       keys = self.class.serializable_fields.keys
       keys.delete(:data_bin)
@@ -182,7 +182,7 @@ module Eth
     end
 
     protected
-    
+
     def sedes
       if self.prevent_replays? && !(Eth.replayable_v? v)
         self.class

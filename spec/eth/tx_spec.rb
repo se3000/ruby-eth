@@ -65,7 +65,7 @@ describe Eth::Tx, type: :model do
   let(:tx_encoded_416) do
     '0xf8cb63843b9aca00830115cb9469351bffb36f3d1a6fa4374da03562a1935e704780b864c950f8f0000000000000000000000000762a441605c438742754bb357dd241c8326c25e0000000000000000000000000000000000000000000000000000000000000000a0000000000000000000000000000000000000000000000000000000000000028820364a03944cee478f84e7186b726858a03b7212281dfd0045df6c22bfb101042a8115ca07676eec5290861869cbd4e029cb8aecb17571dfd2de2499809e462595a956e39'
   end
-  
+
   describe "#initialize" do
     it "sets the arguments in the order of serializable fields" do
       expect(tx.nonce).to eq(nonce)
@@ -106,8 +106,8 @@ describe Eth::Tx, type: :model do
 
     context "when chain_id is not in the parameters" do
       it "uses the default chain ID" do
-        cid = Eth.default_chain_id
-        configure_default_chain_id 42
+        cid = Eth.chain_id
+        configure_chain_id 42
         tx = Eth::Tx.new({
                            nonce: nonce,
                            gas_price: gas_price,
@@ -119,7 +119,7 @@ describe Eth::Tx, type: :model do
                            r: r,
                            s: s
                          })
-        configure_default_chain_id cid
+        configure_chain_id cid
         expect(tx.chain_id).to eq 42
       end
     end
@@ -154,7 +154,7 @@ describe Eth::Tx, type: :model do
     end
 
     it "ignores the default chain ID" do
-      configure_default_chain_id 42
+      configure_chain_id 42
       tx_416 = Eth::Tx.new tx_fields_encoded_416
       expect(tx_416.chain_id).to eq 416
     end
@@ -461,7 +461,7 @@ describe Eth::Tx, type: :model do
 
     context "when transaction was decoded" do
       let(:tx416) { Eth::Tx.decode tx_encoded_416 }
-      
+
       it "nulls the signature on a chain ID change" do
         tx416 = Eth::Tx.decode tx_encoded_416
         expect(tx416.chain_id).to equal(416)

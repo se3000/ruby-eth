@@ -25,8 +25,8 @@ module Eth
       27
     end
 
-    def default_chain_id
-      configuration.default_chain_id
+    def chain_id
+      configuration.chain_id
     end
 
     def v_base
@@ -47,7 +47,7 @@ module Eth
       cid = (signature[:v] - 35) / 2
       (cid < 1) ? nil : cid
     end
-    
+
     private
 
     def configuration
@@ -56,10 +56,10 @@ module Eth
   end
 
   class Configuration
-    attr_accessor :default_chain_id, :tx_data_hex
+    attr_accessor :chain_id, :tx_data_hex
 
     def initialize
-      self.default_chain_id = nil
+      self.chain_id = nil
       self.tx_data_hex = true
     end
   end

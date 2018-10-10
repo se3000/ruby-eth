@@ -1,7 +1,7 @@
 require 'json'
 
 describe "Ethereum common tests" do
-  before { configure_default_chain_id 1 }
+  before { configure_chain_id 1 }
 
   it "passes all the transaction tests" do
     [
