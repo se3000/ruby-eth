@@ -18,14 +18,14 @@ module Helpers
 
   def configure_defaults
     Eth.configure do |config|
-      config.default_chain_id = nil
+      config.chain_id = nil
       config.tx_data_hex = true
     end
   end
 
-  def configure_default_chain_id(id)
+  def configure_chain_id(id)
     Eth.configure do |config|
-      config.default_chain_id = id
+      config.chain_id = id
     end
   end
 
