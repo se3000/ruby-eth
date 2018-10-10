@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Unreleased
 
+## [0.4.10]
+
+### Changed
+- Changed Eth::Configuration.default_chain_id back to .chain_id for dependent libraries.
+
 ## [0.4.9]
 
 ### Changed
