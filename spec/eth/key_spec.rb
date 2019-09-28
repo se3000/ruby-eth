@@ -27,8 +27,6 @@ describe Eth::Key, type: :model do
       10.times do
         signature = key.sign message
         expect(key.verify_signature message, signature).to be_truthy
-        s_value = Eth::Utils.v_r_s_for(signature).last
-        expect(s_value).to be < (Eth::Secp256k1::N/2)
       end
     end
   end
