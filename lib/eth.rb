@@ -12,6 +12,8 @@ module Eth
   autoload :Chains, 'eth/chains'
   autoload :Gas, 'eth/gas'
   autoload :Key, 'eth/key'
+  autoload :PersonalMessage, 'eth/personal_message'
+  autoload :RecoverableSignature, 'eth/recoverable_signature'
   autoload :Sedes, 'eth/sedes'
   autoload :Tx, 'eth/tx'
   autoload :Utils, 'eth/utils'
