@@ -74,11 +74,13 @@ describe Eth::Key, type: :model do
       end
     end
 
-    context "when the signature does not match any public key" do
+    context "when the signature is invalid" do
       let(:signature) { hex_to_bin "1b21a66b" }
 
-      it "signs a message so that the public key is recoverable" do
-        expect(key.verify_signature message, signature).to be_falsy
+      it "raises an error" do
+        expect do
+          key.verify_signature(message, signature)
+        end.to raise_error(::Secp256k1::Error)
       end
     end
   end
