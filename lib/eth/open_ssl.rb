@@ -208,7 +208,15 @@ module Eth
         return false if signature.bytesize != 65
 
         version = signature.unpack('C')[0]
+
+        # Version of signature should be 27 or 28, but 0 and 1 are also possible versions
+        # which can show up in Ledger hardwallet signings
+        if version < 27
+          version += 27
+        end
+
         v_base = Eth.replayable_v?(version) ? Eth.replayable_chain_id : Eth.v_base
+
         return false if version < v_base
 
         recover_public_key_from_signature(hash, signature, (version - v_base), false)
