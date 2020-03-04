@@ -54,6 +54,16 @@ describe Eth::Key, type: :model do
         expect(Eth::Key.personal_recover message, signature).to eq(public_hex)
       end
     end
+
+    context 'when signing with ledger that uses signature with v = 0' do
+      let(:message) { "test" }
+      let(:signature) { "0x5c433983b23738940ce256c59d5bc6a3d5fd12c5bc9bdbf0ffdffb7be1a09d1815ca1db167c61a10945837f3fb4821086d6656b4fa6ede9c4d1aeaf07e2b0adf01" }
+      let(:public_hex) { "04e51ff5abc511f2fda0f893c10054123e92527b5e69e24cca538e74edbd604508259e1b265b54628bc8024fb791e459f67adb770b20962eb38fabe8b86f2aebaa" }
+
+      it "it can recover a public key from a signature generated with ledger/metamask" do
+        expect(Eth::Key.personal_recover message, signature).to eq(public_hex)
+      end
+    end
   end
 
   describe "#verify_signature" do

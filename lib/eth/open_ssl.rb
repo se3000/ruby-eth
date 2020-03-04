@@ -8,18 +8,69 @@ module Eth
     if FFI::Platform.windows?
       ffi_lib 'libeay32', 'ssleay32'
     else
-      ffi_lib ['libssl.so.1.0.0', 'libssl.so.10', 'ssl']
+      ffi_lib [
+        'libssl.so.1.1.0', 'libssl.so.1.1',
+        'libssl.so.1.0.0', 'libssl.so.10',
+        'ssl'
+      ]
     end
 
     NID_secp256k1 = 714
     POINT_CONVERSION_COMPRESSED = 2
     POINT_CONVERSION_UNCOMPRESSED = 4
 
-    attach_function :SSL_library_init, [], :int
-    attach_function :ERR_load_crypto_strings, [], :void
-    attach_function :SSL_load_error_strings, [], :void
-    attach_function :RAND_poll, [], :int
+    # OpenSSL 1.1.0 version as a numerical version value as defined in:
+    # https://www.openssl.org/docs/man1.1.0/man3/OpenSSL_version.html
+    VERSION_1_1_0_NUM = 0x10100000
 
+    # OpenSSL 1.1.0 engine constants, taken from:
+    # https://github.com/openssl/openssl/blob/2be8c56a39b0ec2ec5af6ceaf729df154d784a43/include/openssl/crypto.h
+    OPENSSL_INIT_ENGINE_RDRAND = 0x00000200
+    OPENSSL_INIT_ENGINE_DYNAMIC = 0x00000400
+    OPENSSL_INIT_ENGINE_CRYPTODEV = 0x00001000
+    OPENSSL_INIT_ENGINE_CAPI = 0x00002000
+    OPENSSL_INIT_ENGINE_PADLOCK = 0x00004000
+    OPENSSL_INIT_ENGINE_ALL_BUILTIN = (
+      OPENSSL_INIT_ENGINE_RDRAND |
+      OPENSSL_INIT_ENGINE_DYNAMIC |
+      OPENSSL_INIT_ENGINE_CRYPTODEV |
+      OPENSSL_INIT_ENGINE_CAPI |
+      OPENSSL_INIT_ENGINE_PADLOCK
+    )
+
+    # OpenSSL 1.1.0 load strings constant, taken from:
+    # https://github.com/openssl/openssl/blob/c162c126be342b8cd97996346598ecf7db56130f/include/openssl/ssl.h
+    OPENSSL_INIT_LOAD_SSL_STRINGS = 0x00200000
+
+    # This is the very first function we need to use to determine what version
+    # of OpenSSL we are interacting with.
+    begin
+      attach_function :OpenSSL_version_num, [], :ulong
+    rescue FFI::NotFoundError
+      attach_function :SSLeay, [], :long
+    end
+
+    # Returns the version of SSL present.
+    #
+    # @return [Integer] version number as an integer.
+    def self.version
+      if self.respond_to?(:OpenSSL_version_num)
+        OpenSSL_version_num()
+      else
+        SSLeay()
+      end
+    end
+
+    if version >= VERSION_1_1_0_NUM
+      # Initialization procedure for the library was changed in OpenSSL 1.1.0
+      attach_function :OPENSSL_init_ssl, [:uint64, :pointer], :int
+    else
+      attach_function :SSL_library_init, [], :int
+      attach_function :ERR_load_crypto_strings, [], :void
+      attach_function :SSL_load_error_strings, [], :void
+    end
+
+    attach_function :RAND_poll, [], :int
     attach_function :BN_CTX_free, [:pointer], :int
     attach_function :BN_CTX_new, [], :pointer
     attach_function :BN_add, [:pointer, :pointer, :pointer], :int
@@ -157,7 +208,15 @@ module Eth
         return false if signature.bytesize != 65
 
         version = signature.unpack('C')[0]
+
+        # Version of signature should be 27 or 28, but 0 and 1 are also possible versions
+        # which can show up in Ledger hardwallet signings
+        if version < 27
+          version += 27
+        end
+
         v_base = Eth.replayable_v?(version) ? Eth.replayable_chain_id : Eth.v_base
+
         return false if version < v_base
 
         recover_public_key_from_signature(hash, signature, (version - v_base), false)
@@ -165,9 +224,17 @@ module Eth
 
       def init_ffi_ssl
         return if @ssl_loaded
-        SSL_library_init()
-        ERR_load_crypto_strings()
-        SSL_load_error_strings()
+        if version >= VERSION_1_1_0_NUM
+          OPENSSL_init_ssl(
+            OPENSSL_INIT_LOAD_SSL_STRINGS | OPENSSL_INIT_ENGINE_ALL_BUILTIN,
+            nil
+          )
+        else
+          SSL_library_init()
+          ERR_load_crypto_strings()
+          SSL_load_error_strings()
+        end
+
         RAND_poll()
         @ssl_loaded = true
       end
