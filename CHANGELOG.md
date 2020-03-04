@@ -6,7 +6,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Unreleased
 
+## [0.4.11]
+
+### Added
+- Support for recovering signatures with a V value below 27 (like from Ledger hardware wallets)
+
 ## [0.4.10]
+
+### Changed
+- Use updated sha3 dependency
+- Improved OpenSSL support
 
 ### Changed
 - Changed Eth::Configuration.default_chain_id back to .chain_id for dependent libraries.
