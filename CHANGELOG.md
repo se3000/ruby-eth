@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Unreleased
 
+## [0.4.12]
+
+### Changed
+- Bump rake version because of security vulnerability
+
 ## [0.4.11]
 
 ### Added
