@@ -61,9 +61,7 @@ describe Eth::Key, type: :model do
       let(:public_hex) { "04e51ff5abc511f2fda0f893c10054123e92527b5e69e24cca538e74edbd604508259e1b265b54628bc8024fb791e459f67adb770b20962eb38fabe8b86f2aebaa" }
 
       it "it can recover a public key from a signature generated with ledger/metamask" do
-        10.times do
-          expect(Eth::Key.personal_recover message, signature).to eq(public_hex)
-        end
+        expect(Eth::Key.personal_recover message, signature).to eq(public_hex)
       end
     end
   end
