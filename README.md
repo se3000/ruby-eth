@@ -20,6 +20,12 @@ Or install it yourself as:
 
 ## Usage
 
+First of all, require this gem:
+
+```ruby
+require 'eth'
+```
+
 ### Keys
 
 Create a new public/private key and get its address:
@@ -67,15 +73,16 @@ tx = Eth::Tx.new({
   # assume current fast price is 50 gwei
   gas_price: (50 * 1e9).to_i,
 
-  # you must get the correct nonce for the "from address", otherwise signed-tx will NOT be broadcasted
-  # you can query the nonce from this interface: infura's `eth_getTransactionCount`
+  # you must get the correct nonce for the "from address", otherwise
+  # the signed-tx will NOT be broadcasted
+  # you can query the nonce from interface such as infura's `eth_getTransactionCount`
   nonce: 0,
 
   # this is where the crypto will be sent to
-  to: "0x3Ae7a18407B17037B2ECC4901c1b77Db98367cDA",
+  to: "0x3Ae7a18407B17037B2ECC4901c1b77Db9836888",
 
   # let us send 0.12 ETH
-  value: (BigDecimal("0.12") * 1e18).to_i,
+  value: (BigDecimal("0.12") * 1e18).to_i
 })
 ```
 
