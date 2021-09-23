@@ -4,14 +4,14 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'eth/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "eth"
+  spec.name          = "eth-patched"
   spec.version       = Eth::VERSION
-  spec.authors       = ["Steve Ellis"]
-  spec.email         = ["email@steveell.is"]
+  spec.authors       = ["Steve Ellis", "Afri Schoedon"]
+  spec.email         = ["email@steveell.is", "gems@q9f.cc"]
 
   spec.summary       = %q{Simple API to sign Ethereum transactions.}
   spec.description   = %q{Library to build, parse, and sign Ethereum transactions.}
-  spec.homepage      = "https://github.com/se3000/ruby-eth"
+  spec.homepage      = "https://github.com/q9f/ruby-eth"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }

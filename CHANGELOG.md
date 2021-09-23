@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Unreleased
 
+## [0.4.13] "eth-patched"
+
+### Changed
+- Bump digest-sha3-patched-ruby-3 version for ruby 3 support
+
 ## [0.4.12]
 
 ### Changed
