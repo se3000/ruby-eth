@@ -13,7 +13,8 @@ jobs:
         ruby-version: 3.0
     - name: Install Dependencies
       run: |
+        git submodule update --init
         bundle install
     - name: Run Tests
       run: |
-        rake spec
+        rspec
