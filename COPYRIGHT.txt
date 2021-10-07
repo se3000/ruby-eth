@@ -1,0 +1,5 @@
+Copyright (c) 2016-2020 Steve Ellis; licensed under MIT License
+https://github.com/se3000/ruby-eth
+
+Copyright (c) 2021-2022 Afri Schoedon; re-licensed under Apache 2.0
+https://github.com/q9f/ruby-eth
