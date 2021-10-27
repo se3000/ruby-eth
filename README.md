@@ -1,4 +1,10 @@
-# Eth [![Travis-CI](https://travis-ci.org/se3000/ruby-eth.svg?branch=master)](https://travis-ci.org/se3000/ruby-eth) [![Code Climate](https://codeclimate.com/github/se3000/ruby-eth/badges/gpa.svg)](https://codeclimate.com/github/se3000/ruby-eth) [![Gitter](https://badges.gitter.im/ruby-eth/Lobby.svg)](https://gitter.im/ruby-eth/Lobby)
+# Eth for Ruby
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/se3000/ruby-eth/Build)](https://github.com/se3000/ruby-eth/actions)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/se3000/ruby-eth)](https://github.com/se3000/ruby-eth/releases)
+[![Gem](https://img.shields.io/gem/v/eth)](https://rubygems.org/gems/eth)
+[![Gem](https://img.shields.io/gem/dt/eth)](https://rubygems.org/gems/eth)
+[![GitHub top language](https://img.shields.io/github/languages/top/se3000/ruby-eth?color=red)](https://github.com/se3000/ruby-eth/pulse)
+[![GitHub](https://img.shields.io/github/license/se3000/ruby-eth)](LICENSE)
 
 A simple library to build and sign Ethereum transactions. Allows separation of key and node management. Sign transactions and handle keys anywhere you can run ruby, broadcast transactions through any node.
 
@@ -12,7 +18,7 @@ gem 'eth'
 
 And then execute:
 
-    $ bundle
+    $ bundle install
 
 Or install it yourself as:
 
@@ -118,7 +124,7 @@ end
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/se3000/ethereum-tx. Tests are encouraged.
+Bug reports and pull requests are welcome on GitHub at https://github.com/se3000/ruby-eth. Tests are encouraged.
 
 ### Tests
 
@@ -136,7 +142,7 @@ rspec
 
 ## License
 
-The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
+The gem is available as open-source software under the terms of the [MIT License](http://opensource.org/licenses/MIT).
 
 ## TODO
 
