@@ -142,7 +142,7 @@ rspec
 
 ## License
 
-The gem is available as open-source software under the terms of the [MIT License](LICENSE).
+The gem is available as open-source software under the terms of the [MIT License](http://opensource.org/licenses/MIT).
 
 ## TODO
 
