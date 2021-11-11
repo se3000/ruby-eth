@@ -33,6 +33,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'keccak', '~> 1.2'
   spec.add_dependency 'ffi', '~> 1.15'
   spec.add_dependency 'money-tree', '~> 0.10'
+  spec.add_dependency 'openssl', '~> 2.2'
   spec.add_dependency 'rlp', '~> 0.7'
   spec.add_dependency 'scrypt', '~> 3.0'
 
