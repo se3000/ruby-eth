@@ -33,4 +33,4 @@ jobs:
         bundle install
     - name: Run Tests
       run: |
-        rspec
+        bundle exec rspec
