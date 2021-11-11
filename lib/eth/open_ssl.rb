@@ -315,6 +315,13 @@ module Eth
       msg32 = FFI::MemoryPointer.new(:uchar, 32).put_bytes(0, hash)
 
       version = signature.unpack('C')[0]
+
+      # Version of signature should be 27 or 28, but 0 and 1 are also possible versions
+      # which can show up in Ledger hardwallet signings
+      if version < 27
+        version += 27
+      end
+
       return false if version < 27 || version > 34
 
       compressed = version >= 31
