@@ -1,6 +1,5 @@
 module Eth
   module Utils
-
     extend self
 
     def normalize_address(address)
@@ -66,11 +65,11 @@ module Eth
     end
 
     def keccak256(x)
-      Digest::SHA3.new(256).digest(x)
+      Digest::Keccak.new(256).digest(x)
     end
 
     def keccak512(x)
-      Digest::SHA3.new(512).digest(x)
+      Digest::Keccak.new(512).digest(x)
     end
 
     def keccak256_rlp(x)

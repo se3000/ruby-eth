@@ -1,4 +1,4 @@
-require 'digest/sha3'
+require 'digest/keccak'
 require 'ffi'
 require 'money-tree'
 require 'rlp'

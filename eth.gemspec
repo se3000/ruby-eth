@@ -30,7 +30,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
   spec.test_files    = spec.files.grep %r{^(test|spec|features)/}
 
-  spec.add_dependency 'keccak', '~> 1.2'
+  spec.add_dependency 'keccak', '~> 1.3'
   spec.add_dependency 'ffi', '~> 1.15'
   spec.add_dependency 'money-tree', '~> 0.10'
   spec.add_dependency 'rlp', '~> 0.7'
