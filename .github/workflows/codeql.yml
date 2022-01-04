@@ -8,9 +8,6 @@ on:
   push:
     branches:
       - develop
-  schedule:
-    -
-      cron: "45 1 * * 3"
 
 jobs:
   analyze:
@@ -36,3 +33,12 @@ jobs:
         uses: github/codeql-action/autobuild@v1
       - name: "Perform CodeQL Analysis"
         uses: github/codeql-action/analyze@v1
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '2.7'
+          bundler-cache: true
+      - name: "Run rufo code formatting checks"
+        run: |
+          gem install rufo
+          rufo --check ./lib
+          rufo --check ./spec
