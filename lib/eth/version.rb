@@ -1,3 +1,3 @@
 module Eth
-  VERSION = "0.4.22"
+  VERSION = "0.4.24"
 end
