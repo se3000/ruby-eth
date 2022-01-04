@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Unreleased
 
+## [0.4.17]
+### Changed
+- Gems: bump version to 0.4.17 [#70](https://github.com/se3000/ruby-eth/pull/70)
+- Gems: bump keccak to 1.3.0 [#69](https://github.com/se3000/ruby-eth/pull/69)
+
 ## [0.4.16]
 ### Changed
 - Docs: update changelog [#65](https://github.com/se3000/ruby-eth/pull/65)
