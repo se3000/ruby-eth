@@ -11,16 +11,26 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        ruby: ['2.7', '3.0']
     steps:
     - uses: actions/checkout@v2
     - uses: ruby/setup-ruby@v1
       with:
-        ruby-version: 3.0
+        ruby-version: ${{ matrix.ruby }}
+        bundler-cache: true
+    - name: Brew Automake
+      run: |
+        brew install automake
+      if: startsWith(matrix.os, 'macOS')
     - name: Install Dependencies
       run: |
         git submodule update --init
         bundle install
     - name: Run Tests
       run: |
-        rspec
+        bundle exec rspec

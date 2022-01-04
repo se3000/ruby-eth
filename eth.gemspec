@@ -32,12 +32,13 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'keccak', '~> 1.3'
   spec.add_dependency 'ffi', '~> 1.15'
-  spec.add_dependency 'money-tree', '~> 0.10'
+  spec.add_dependency 'money-tree', '~> 0.11'
+  spec.add_dependency 'openssl', '~> 3.0'
   spec.add_dependency 'rlp', '~> 0.7'
   spec.add_dependency 'scrypt', '~> 3.0'
 
   spec.platform = Gem::Platform::RUBY
-  spec.required_ruby_version = ">= 2.2", "< 4.0"
+  spec.required_ruby_version = ">= 2.6", "< 4.0"
 
   spec.add_development_dependency 'bundler', '~> 2.2'
   spec.add_development_dependency 'pry', '~> 0.14'
