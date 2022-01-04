@@ -1,6 +1,5 @@
 module Eth
   class Tx
-
     include RLP::Sedes::Serializable
     extend Sedes
 
@@ -13,7 +12,7 @@ module Eth
       data_bin: binary,
       v: big_endian_int,
       r: big_endian_int,
-      s: big_endian_int
+      s: big_endian_int,
     })
 
     attr_writer :signature
@@ -28,7 +27,7 @@ module Eth
     end
 
     def initialize(params)
-      fields = {v: 0, r: 0, s: 0}.merge params
+      fields = { v: 0, r: 0, s: 0 }.merge params
       fields[:to] = Utils.normalize_address(fields[:to])
 
       self.chain_id = (params[:chain_id]) ? params.delete(:chain_id) : Eth.chain_id
@@ -105,6 +104,7 @@ module Eth
     def hash
       "0x#{Utils.bin_to_hex Utils.keccak256_rlp(self)}"
     end
+
     alias_method :id, :hash
 
     def data_hex
@@ -120,7 +120,7 @@ module Eth
     end
 
     def data=(string)
-      Eth.tx_data_hex? ? self.data_hex=(string) : self.data_bin=(string)
+      Eth.tx_data_hex? ? self.data_hex = (string) : self.data_bin = (string)
     end
 
     def chain_id
@@ -190,7 +190,6 @@ module Eth
         UnsignedTx
       end
     end
-
   end
 
   UnsignedTx = Tx.exclude([:v, :r, :s])

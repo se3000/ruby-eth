@@ -1,5 +1,4 @@
 describe Eth do
-
   describe ".configure" do
   end
 

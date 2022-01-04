@@ -35,6 +35,5 @@ module Eth
     def binary
       RLP::Sedes.binary
     end
-
   end
 end
