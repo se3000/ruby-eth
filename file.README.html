@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  File: README
+  
+    &mdash; Documentation by YARD 0.9.27
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" />
+
+<script type="text/javascript">
+  pathId = "README";
+  relpath = '';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="file_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="_index.html">Index</a> &raquo; 
+    <span class="title">File: README</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><div id='filecontents'>
+<h1 id="label-Eth+for+Ruby">Eth for Ruby</h1>
+
+<p><a href="https://github.com/se3000/ruby-eth/actions"><img src="https://img.shields.io/github/workflow/status/se3000/ruby-eth/Build"></a> <a href="https://github.com/se3000/ruby-eth/releases"><img src="https://img.shields.io/github/v/release/se3000/ruby-eth"></a> <a href="https://rubygems.org/gems/eth"><img src="https://img.shields.io/gem/v/eth"></a> <a href="https://rubygems.org/gems/eth"><img src="https://img.shields.io/gem/dt/eth"></a> <a href="https://github.com/se3000/ruby-eth/pulse"><img src="https://img.shields.io/github/languages/top/se3000/ruby-eth?color=red"></a> <a href="LICENSE"><img src="https://img.shields.io/github/license/se3000/ruby-eth"></a></p>
+
+<p>A simple library to build and sign Ethereum transactions. Allows separation of key and node management. Sign transactions and handle keys anywhere you can run ruby, broadcast transactions through any node.</p>
+
+<h2 id="label-Installation">Installation</h2>
+
+<p>Add this line to your application&#39;s Gemfile:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>eth</span><span class='tstring_end'>&#39;</span></span>
+</code></pre>
+
+<p>And then execute:</p>
+
+<pre class="code ruby"><code class="ruby">$ bundle install
+</code></pre>
+
+<p>Or install it yourself as:</p>
+
+<pre class="code ruby"><code class="ruby">$ gem install eth
+</code></pre>
+
+<h2 id="label-Usage">Usage</h2>
+
+<h3 id="label-Keys">Keys</h3>
+
+<p>Create a new public/private key and get its address:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_key'>key</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Eth.html" title="Eth (module)">Eth</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Eth/Key.html" title="Eth::Key (class)">Key</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Eth/Key.html#initialize-instance_method" title="Eth::Key#initialize (method)">new</a></span></span>
+<span class='id identifier rubyid_key'>key</span><span class='period'>.</span><span class='id identifier rubyid_private_hex'>private_hex</span>
+<span class='id identifier rubyid_key'>key</span><span class='period'>.</span><span class='id identifier rubyid_public_hex'>public_hex</span>
+<span class='id identifier rubyid_key'>key</span><span class='period'>.</span><span class='id identifier rubyid_address'>address</span> <span class='comment'># EIP55 checksummed address
+</span></code></pre>
+
+<p>Import an existing key:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_old_key'>old_key</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Eth.html" title="Eth (module)">Eth</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Eth/Key.html" title="Eth::Key (class)">Key</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Eth/Key.html#initialize-instance_method" title="Eth::Key#initialize (method)">new</a></span></span> <span class='label'>priv:</span> <span class='id identifier rubyid_private_key'>private_key</span>
+</code></pre>
+
+<p>Or decrypt an <a href="https://github.com/ethereum/wiki/wiki/Web3-Secret-Storage-Definition">encrypted key</a>:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_decrypted_key'>decrypted_key</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Eth.html" title="Eth (module)">Eth</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Eth/Key.html" title="Eth::Key (class)">Key</a></span></span><span class='period'>.</span><span class='id identifier rubyid_decrypt'><span class='object_link'><a href="Eth/Key.html#decrypt-class_method" title="Eth::Key.decrypt (method)">decrypt</a></span></span> <span class='const'>File</span><span class='period'>.</span><span class='id identifier rubyid_read'>read</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>./some/path.json</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>p455w0rD</span><span class='tstring_end'>&#39;</span></span>
+</code></pre>
+
+<p>You can also encrypt your keys for use with other ethereum libraries:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_encrypted_key_info'>encrypted_key_info</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Eth.html" title="Eth (module)">Eth</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Eth/Key.html" title="Eth::Key (class)">Key</a></span></span><span class='period'>.</span><span class='id identifier rubyid_encrypt'><span class='object_link'><a href="Eth/Key.html#encrypt-class_method" title="Eth::Key.encrypt (method)">encrypt</a></span></span> <span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>p455w0rD</span><span class='tstring_end'>&#39;</span></span>
+</code></pre>
+
+<h3 id="label-Transactions">Transactions</h3>
+
+<p>Build a transaction from scratch:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_tx'>tx</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Eth.html" title="Eth (module)">Eth</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Eth/Tx.html" title="Eth::Tx (class)">Tx</a></span></span><span class='period'>.</span><span class='id identifier rubyid_new'><span class='object_link'><a href="Eth/Tx.html#initialize-instance_method" title="Eth::Tx#initialize (method)">new</a></span></span><span class='lparen'>(</span><span class='lbrace'>{</span>
+  <span class='label'>data:</span> <span class='id identifier rubyid_hex_data'>hex_data</span><span class='comma'>,</span>
+  <span class='label'>gas_limit:</span> <span class='int'>21_000</span><span class='comma'>,</span>
+  <span class='label'>gas_price:</span> <span class='int'>3_141_592</span><span class='comma'>,</span>
+  <span class='label'>nonce:</span> <span class='int'>1</span><span class='comma'>,</span>
+  <span class='label'>to:</span> <span class='id identifier rubyid_key2'>key2</span><span class='period'>.</span><span class='id identifier rubyid_address'>address</span><span class='comma'>,</span>
+  <span class='label'>value:</span> <span class='int'>1_000_000_000_000</span><span class='comma'>,</span>
+<span class='rbrace'>}</span><span class='rparen'>)</span>
+</code></pre>
+
+<p>Or decode an encoded raw transaction:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_tx'>tx</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Eth.html" title="Eth (module)">Eth</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Eth/Tx.html" title="Eth::Tx (class)">Tx</a></span></span><span class='period'>.</span><span class='id identifier rubyid_decode'><span class='object_link'><a href="Eth/Tx.html#decode-class_method" title="Eth::Tx.decode (method)">decode</a></span></span> <span class='id identifier rubyid_hex'>hex</span>
+</code></pre>
+
+<p>Then sign the transaction:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_tx'>tx</span><span class='period'>.</span><span class='id identifier rubyid_sign'>sign</span> <span class='id identifier rubyid_key'>key</span>
+</code></pre>
+
+<p>Get the raw transaction with <code>tx.hex</code>, and broadcast it through any Ethereum node. Or, just get the TXID with <code>tx.hash</code>.</p>
+
+<h3 id="label-Utils">Utils</h3>
+
+<p>Validate an <a href="https://github.com/ethereum/EIPs/issues/55">EIP55</a> checksummed address:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='const'><span class='object_link'><a href="Eth.html" title="Eth (module)">Eth</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Eth/Utils.html" title="Eth::Utils (module)">Utils</a></span></span><span class='period'>.</span><span class='id identifier rubyid_valid_address?'><span class='object_link'><a href="Eth/Utils.html#valid_address%3F-instance_method" title="Eth::Utils#valid_address? (method)">valid_address?</a></span></span> <span class='id identifier rubyid_address'>address</span>
+</code></pre>
+
+<p>Or add a checksum to an existing address:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='const'><span class='object_link'><a href="Eth.html" title="Eth (module)">Eth</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Eth/Utils.html" title="Eth::Utils (module)">Utils</a></span></span><span class='period'>.</span><span class='id identifier rubyid_format_address'><span class='object_link'><a href="Eth/Utils.html#format_address-instance_method" title="Eth::Utils#format_address (method)">format_address</a></span></span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>0x4bc787699093f11316e819b5692be04a712c4e69</span><span class='tstring_end'>&quot;</span></span> <span class='comment'># =&gt; &quot;0x4bc787699093f11316e819B5692be04A712C4E69&quot;
+</span></code></pre>
+
+<h3 id="label-Personal+Signatures">Personal Signatures</h3>
+
+<p>You can recover public keys and generate web3/metamask-compatible signatures:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='comment'># Generate signature
+</span><span class='id identifier rubyid_key'>key</span><span class='period'>.</span><span class='id identifier rubyid_personal_sign'>personal_sign</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>hello world</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+
+<span class='comment'># Recover signature
+</span><span class='id identifier rubyid_message'>message</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>test</span><span class='tstring_end'>&#39;</span></span>
+<span class='id identifier rubyid_signature'>signature</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>0x3eb24bd327df8c2b614c3f652ec86efe13aa721daf203820241c44861a26d37f2bffc6e03e68fc4c3d8d967054c9cb230ed34339b12ef89d512b42ae5bf8c2ae1c</span><span class='tstring_end'>&#39;</span></span>
+<span class='const'><span class='object_link'><a href="Eth.html" title="Eth (module)">Eth</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Eth/Key.html" title="Eth::Key (class)">Key</a></span></span><span class='period'>.</span><span class='id identifier rubyid_personal_recover'><span class='object_link'><a href="Eth/Key.html#personal_recover-class_method" title="Eth::Key.personal_recover (method)">personal_recover</a></span></span><span class='lparen'>(</span><span class='id identifier rubyid_message'>message</span><span class='comma'>,</span> <span class='id identifier rubyid_signature'>signature</span><span class='rparen'>)</span> <span class='comment'># =&gt; 043e5b33f0080491e21f9f5f7566de59a08faabf53edbc3c32aaacc438552b25fdde531f8d1053ced090e9879cbf2b0d1c054e4b25941dab9254d2070f39418afc
+</span></code></pre>
+
+<h3 id="label-Configure">Configure</h3>
+
+<p>In order to prevent replay attacks, you must specify which Ethereum chain your transactions are created for. See <a href="https://github.com/ethereum/EIPs/issues/155">EIP 155</a> for more detail.</p>
+
+<pre class="code ruby"><code class="ruby"><span class='const'><span class='object_link'><a href="Eth.html" title="Eth (module)">Eth</a></span></span><span class='period'>.</span><span class='id identifier rubyid_configure'><span class='object_link'><a href="Eth.html#configure-class_method" title="Eth.configure (method)">configure</a></span></span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_config'>config</span><span class='op'>|</span>
+  <span class='id identifier rubyid_config'>config</span><span class='period'>.</span><span class='id identifier rubyid_chain_id'>chain_id</span> <span class='op'>=</span> <span class='int'>1</span> <span class='comment'># nil by default, meaning valid on any chain
+</span><span class='kw'>end</span>
+</code></pre>
+
+<h2 id="label-Contributing">Contributing</h2>
+
+<p>Bug reports and pull requests are welcome on GitHub at <a href="https://github.com/se3000/ruby-eth">github.com/se3000/ruby-eth</a>. Tests are encouraged.</p>
+
+<h3 id="label-Tests">Tests</h3>
+
+<p>First install the <a href="https://github.com/ethereum/tests">Ethereum common tests</a>:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_git'>git</span> <span class='id identifier rubyid_submodule'>submodule</span> <span class='id identifier rubyid_update'>update</span> <span class='op'>-</span><span class='op'>-</span><span class='id identifier rubyid_init'>init</span>
+</code></pre>
+
+<p>Then run the associated tests:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_rspec'>rspec</span>
+</code></pre>
+
+<h2 id="label-License">License</h2>
+
+<p>The gem is available as open-source software under the terms of the <a href="http://opensource.org/licenses/MIT">MIT License</a>.</p>
+
+<h2 id="label-TODO">TODO</h2>
+<ul><li>
+<p>Better test suite.</p>
+</li><li>
+<p>Expose API for HD keys.</p>
+</li><li>
+<p>Support signing with <a href="https://github.com/bitcoin-core/secp256k1">libsecp256k1</a>.</p>
+</li></ul>
+</div></div>
+
+      <div id="footer">
+  Generated on Tue Jan  4 13:34:03 2022 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.27 (ruby-2.7.5).
+</div>
+
+    </div>
+  </body>
+</html>
