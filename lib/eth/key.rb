@@ -1,7 +1,7 @@
 module Eth
   class Key
-    autoload :Decrypter, 'eth/key/decrypter'
-    autoload :Encrypter, 'eth/key/encrypter'
+    autoload :Decrypter, "eth/key/decrypter"
+    autoload :Encrypter, "eth/key/encrypter"
 
     attr_reader :private_key, :public_key
 
@@ -17,7 +17,7 @@ module Eth
     end
 
     def self.personal_recover(message, signature)
-      bin_signature = Utils.hex_to_bin(signature).bytes.rotate(-1).pack('c*')
+      bin_signature = Utils.hex_to_bin(signature).bytes.rotate(-1).pack("c*")
       OpenSsl.recover_compact(Utils.keccak256(Utils.prefix_message(message)), bin_signature)
     end
 
@@ -41,6 +41,7 @@ module Eth
     def address
       Utils.public_key_to_address public_hex
     end
+
     alias_method :to_address, :address
 
     def sign(message)
@@ -60,9 +61,8 @@ module Eth
     end
 
     def personal_sign(message)
-      Utils.bin_to_hex(sign(Utils.prefix_message(message)).bytes.rotate(1).pack('c*'))
+      Utils.bin_to_hex(sign(Utils.prefix_message(message)).bytes.rotate(1).pack("c*"))
     end
-
 
     private
 
@@ -72,8 +72,7 @@ module Eth
 
     def valid_s?(signature)
       s_value = Utils.v_r_s_for(signature).last
-      s_value <= Secp256k1::N/2 && s_value != 0
+      s_value <= Secp256k1::N / 2 && s_value != 0
     end
-
   end
 end

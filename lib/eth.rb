@@ -1,20 +1,20 @@
-require 'digest/keccak'
-require 'ffi'
-require 'money-tree'
-require 'rlp'
+require "digest/keccak"
+require "ffi"
+require "money-tree"
+require "rlp"
 
 module Eth
   BYTE_ZERO = "\x00".freeze
-  UINT_MAX = 2**256 - 1
+  UINT_MAX = 2 ** 256 - 1
 
-  autoload :Address, 'eth/address'
-  autoload :Gas, 'eth/gas'
-  autoload :Key, 'eth/key'
-  autoload :OpenSsl, 'eth/open_ssl'
-  autoload :Secp256k1, 'eth/secp256k1'
-  autoload :Sedes, 'eth/sedes'
-  autoload :Tx, 'eth/tx'
-  autoload :Utils, 'eth/utils'
+  autoload :Address, "eth/address"
+  autoload :Gas, "eth/gas"
+  autoload :Key, "eth/key"
+  autoload :OpenSsl, "eth/open_ssl"
+  autoload :Secp256k1, "eth/secp256k1"
+  autoload :Sedes, "eth/sedes"
+  autoload :Tx, "eth/tx"
+  autoload :Utils, "eth/utils"
 
   class << self
     def configure

@@ -3,8 +3,8 @@
 
 # encoding: ascii-8bit
 
-require 'openssl'
-require 'ffi'
+require "openssl"
+require "ffi"
 
 module Eth
   class OpenSsl
@@ -24,13 +24,11 @@ module Eth
     OPENSSL_INIT_ENGINE_CRYPTODEV = 0x00001000
     OPENSSL_INIT_ENGINE_CAPI = 0x00002000
     OPENSSL_INIT_ENGINE_PADLOCK = 0x00004000
-    OPENSSL_INIT_ENGINE_ALL_BUILTIN = (
-      OPENSSL_INIT_ENGINE_RDRAND |
-      OPENSSL_INIT_ENGINE_DYNAMIC |
-      OPENSSL_INIT_ENGINE_CRYPTODEV |
-      OPENSSL_INIT_ENGINE_CAPI |
-      OPENSSL_INIT_ENGINE_PADLOCK
-    )
+    OPENSSL_INIT_ENGINE_ALL_BUILTIN = (OPENSSL_INIT_ENGINE_RDRAND |
+                                       OPENSSL_INIT_ENGINE_DYNAMIC |
+                                       OPENSSL_INIT_ENGINE_CRYPTODEV |
+                                       OPENSSL_INIT_ENGINE_CAPI |
+                                       OPENSSL_INIT_ENGINE_PADLOCK)
 
     # OpenSSL 1.1.0 load strings constant, taken from:
     # https://github.com/openssl/openssl/blob/c162c126be342b8cd97996346598ecf7db56130f/include/openssl/ssl.h
@@ -81,7 +79,7 @@ module Eth
     attach_function :EC_KEY_new_by_curve_name, [:int], :pointer
     attach_function :EC_KEY_set_conv_form, %i[pointer int], :void
     attach_function :EC_KEY_set_private_key, %i[pointer pointer], :int
-    attach_function :EC_KEY_set_public_key,  %i[pointer pointer], :int
+    attach_function :EC_KEY_set_public_key, %i[pointer pointer], :int
     attach_function :EC_POINT_free, [:pointer], :int
     attach_function :EC_POINT_mul, %i[pointer pointer pointer pointer pointer pointer], :int
     attach_function :EC_POINT_new, [:pointer], :pointer
@@ -106,17 +104,17 @@ module Eth
     # example:
     #   keypair = Bitcoin.generate_key; Bitcoin::OpenSSL_EC.regenerate_key(keypair.first) == keypair
     def self.regenerate_key(private_key)
-      private_key = [private_key].pack('H*') if private_key.bytesize >= (32 * 2)
-      private_key_hex = private_key.unpack('H*')[0]
+      private_key = [private_key].pack("H*") if private_key.bytesize >= (32 * 2)
+      private_key_hex = private_key.unpack("H*")[0]
 
-      group = OpenSSL::PKey::EC::Group.new('secp256k1')
+      group = OpenSSL::PKey::EC::Group.new("secp256k1")
       key = OpenSSL::PKey::EC.new(group)
       key.private_key = OpenSSL::BN.new(private_key_hex, 16)
       key.public_key = group.generator.mul(key.private_key)
 
-      priv_hex = key.private_key.to_bn.to_s(16).downcase.rjust(64, '0')
+      priv_hex = key.private_key.to_bn.to_s(16).downcase.rjust(64, "0")
       if priv_hex != private_key_hex
-        raise 'regenerated wrong private_key, raise here before generating a faulty public_key too!'
+        raise "regenerated wrong private_key, raise here before generating a faulty public_key too!"
       end
 
       [priv_hex, key.public_key.to_bn.to_s(16).downcase]
@@ -201,7 +199,7 @@ module Eth
       length = i2o_ECPublicKey(eckey, nil)
       buf = FFI::MemoryPointer.new(:uint8, length)
       ptr = FFI::MemoryPointer.new(:pointer).put_pointer(0, buf)
-      pub_hex = buf.read_string(length).unpack('H*')[0] if i2o_ECPublicKey(eckey, ptr) == length
+      pub_hex = buf.read_string(length).unpack("H*")[0] if i2o_ECPublicKey(eckey, ptr) == length
 
       EC_KEY_free(eckey)
 
@@ -215,7 +213,7 @@ module Eth
       init_ffi_ssl
 
       buf = FFI::MemoryPointer.new(:uint8, 34)
-      temp = signature.unpack('C*')
+      temp = signature.unpack("C*")
       length_r = temp[3]
       length_s = temp[5 + length_r]
       sig = FFI::MemoryPointer.from_string(signature)
@@ -244,23 +242,23 @@ module Eth
       sig.concat(temp.slice(4, length_r))
       sig << 0x02
       sig << length_s
-      sig.concat(buf.read_string(length_s).unpack('C*'))
+      sig.concat(buf.read_string(length_s).unpack("C*"))
       sig[1] = sig.size - 2
 
       BN_free(s)
       EC_KEY_free(eckey)
 
-      sig.pack('C*')
+      sig.pack("C*")
     end
 
     def self.sign_compact(hash, private_key, public_key_hex = nil, pubkey_compressed = nil)
       msg32 = FFI::MemoryPointer.new(:uchar, 32).put_bytes(0, hash)
 
-      private_key = [private_key].pack('H*') if private_key.bytesize >= 64
-      private_key_hex = private_key.unpack('H*')[0]
+      private_key = [private_key].pack("H*") if private_key.bytesize >= 64
+      private_key_hex = private_key.unpack("H*")[0]
 
       public_key_hex ||= regenerate_key(private_key_hex).last
-      pubkey_compressed ||= public_key_hex[0..1] != '04'
+      pubkey_compressed ||= public_key_hex[0..1] != "04"
 
       init_ffi_ssl
       eckey = EC_KEY_new_by_curve_name(NID_secp256k1)
@@ -294,7 +292,7 @@ module Eth
       rec_id = nil
       if signature.get_array_of_pointer(0, 2).all? { |i| BN_num_bits(i) <= 256 }
         4.times do |i|
-          head = [27 + i + (pubkey_compressed ? 4 : 0)].pack('C')
+          head = [27 + i + (pubkey_compressed ? 4 : 0)].pack("C")
           recovered_key = recover_public_key_from_signature(
             msg32.read_string(32), [head, r, s].join, i, pubkey_compressed
           )
@@ -314,7 +312,7 @@ module Eth
       return false if signature.bytesize != 65
       msg32 = FFI::MemoryPointer.new(:uchar, 32).put_bytes(0, hash)
 
-      version = signature.unpack('C')[0]
+      version = signature.unpack("C")[0]
 
       # Version of signature should be 27 or 28, but 0 and 1 are also possible versions
       # which can show up in Ledger hardwallet signings
@@ -359,7 +357,7 @@ module Eth
 
       # New versions of OpenSSL will reject non-canonical DER signatures. de/re-serialize first.
       norm_der = FFI::MemoryPointer.new(:pointer)
-      sig_ptr  = FFI::MemoryPointer.new(:pointer).put_pointer(
+      sig_ptr = FFI::MemoryPointer.new(:pointer).put_pointer(
         0, FFI::MemoryPointer.from_string(signature)
       )
 

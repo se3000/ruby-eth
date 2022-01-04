@@ -1,6 +1,5 @@
 module Eth
   class Address
-
     def initialize(address)
       @address = Utils.prefix_hex(address)
     end
@@ -24,7 +23,6 @@ module Eth
 
       Utils.prefix_hex(cased.join)
     end
-
 
     private
 
@@ -57,6 +55,5 @@ module Eth
     def unprefixed
       Utils.remove_hex_prefix address
     end
-
   end
 end

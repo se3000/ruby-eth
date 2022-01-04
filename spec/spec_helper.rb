@@ -1,9 +1,8 @@
-$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
-require 'eth'
-require 'securerandom'
+$LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
+require "eth"
+require "securerandom"
 
 module Helpers
-
   def bin_to_hex(string)
     string.unpack("H*")[0]
   end
@@ -13,7 +12,7 @@ module Helpers
   end
 
   def read_hex_fixture(name)
-    File.read("./spec/fixtures/#{name.gsub(/\A0x/, '')}.hex").strip
+    File.read("./spec/fixtures/#{name.gsub(/\A0x/, "")}.hex").strip
   end
 
   def configure_defaults
@@ -38,7 +37,6 @@ module Helpers
   def read_key_fixture(path)
     File.read "./spec/fixtures/keys/#{path}.json"
   end
-
 end
 
 RSpec.configure do |config|
