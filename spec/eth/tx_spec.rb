@@ -3,7 +3,7 @@ describe Eth::Tx, type: :model do
   let(:gas_price) { 10_000 }
   let(:gas_limit) { 100_000 }
   let(:recipient) { SecureRandom.hex 20 }
-  let(:value) { 10**11 }
+  let(:value) { 10 ** 11 }
   let(:data) { SecureRandom.hex }
   let(:v) { 27 }
   let(:r) { rand(1_000_000_000) }
@@ -19,7 +19,7 @@ describe Eth::Tx, type: :model do
       data: data,
       v: v,
       r: r,
-      s: s
+      s: s,
     })
   end
   let(:tx_fields_42) do
@@ -33,7 +33,7 @@ describe Eth::Tx, type: :model do
       data: data,
       v: v,
       r: r,
-      s: s
+      s: s,
     }
   end
   let(:tx_fields_416) do
@@ -47,23 +47,23 @@ describe Eth::Tx, type: :model do
       data: data,
       v: v,
       r: r,
-      s: s
+      s: s,
     }
   end
   let(:tx_fields_encoded_416) do
     {
-      data: '0xc950f8f0000000000000000000000000762a441605c438742754bb357dd241c8326c25e0000000000000000000000000000000000000000000000000000000000000000a0000000000000000000000000000000000000000000000000000000000000028',
-      to: '0x69351bffb36f3d1a6fa4374da03562a1935e7047',
+      data: "0xc950f8f0000000000000000000000000762a441605c438742754bb357dd241c8326c25e0000000000000000000000000000000000000000000000000000000000000000a0000000000000000000000000000000000000000000000000000000000000028",
+      to: "0x69351bffb36f3d1a6fa4374da03562a1935e7047",
       gas_price: 0x3b9aca00,
       value: 0x0,
       nonce: 99,
       chain_id: 416,
-      from: '0x22441c383a1e27acbf99663f1861e4936ac86049',
-      gas_limit: 71115
+      from: "0x22441c383a1e27acbf99663f1861e4936ac86049",
+      gas_limit: 71115,
     }
   end
   let(:tx_encoded_416) do
-    '0xf8cb63843b9aca00830115cb9469351bffb36f3d1a6fa4374da03562a1935e704780b864c950f8f0000000000000000000000000762a441605c438742754bb357dd241c8326c25e0000000000000000000000000000000000000000000000000000000000000000a0000000000000000000000000000000000000000000000000000000000000028820364a03944cee478f84e7186b726858a03b7212281dfd0045df6c22bfb101042a8115ca07676eec5290861869cbd4e029cb8aecb17571dfd2de2499809e462595a956e39'
+    "0xf8cb63843b9aca00830115cb9469351bffb36f3d1a6fa4374da03562a1935e704780b864c950f8f0000000000000000000000000762a441605c438742754bb357dd241c8326c25e0000000000000000000000000000000000000000000000000000000000000000a0000000000000000000000000000000000000000000000000000000000000028820364a03944cee478f84e7186b726858a03b7212281dfd0045df6c22bfb101042a8115ca07676eec5290861869cbd4e029cb8aecb17571dfd2de2499809e462595a956e39"
   end
 
   describe "#initialize" do
@@ -117,7 +117,7 @@ describe Eth::Tx, type: :model do
                            data: data,
                            v: v,
                            r: r,
-                           s: s
+                           s: s,
                          })
         configure_chain_id cid
         expect(tx.chain_id).to eq 42
@@ -262,7 +262,7 @@ describe Eth::Tx, type: :model do
 
     it "creates a hex representation" do
       tx = Eth::Tx.new({
-        data: 'abcdef',
+        data: "abcdef",
         gas_limit: 3_141_592,
         gas_price: 20_000_000_000,
         nonce: 0,
@@ -312,7 +312,7 @@ describe Eth::Tx, type: :model do
     end
 
     context "when the chain ID is changed" do
-      let(:key) { Eth::Key.new priv: '4bdd21761a483f71054e14f5b827213567971c676928d9a1808cbfa4b7501200' }
+      let(:key) { Eth::Key.new priv: "4bdd21761a483f71054e14f5b827213567971c676928d9a1808cbfa4b7501200" }
 
       it "returns a nil sender if the chain ID did change" do
         tx42 = Eth::Tx.new tx_fields_42
@@ -341,8 +341,8 @@ describe Eth::Tx, type: :model do
   end
 
   describe "#hash" do
-    let(:txid1) { '0x66734e70ea28eaa28eb1bace4ca87573c48f52cca7590459ad20dc58bae1a819' }
-    let(:txid2) { '0x7151f5b0d229c62a5076de4133ba06fffc033e25bf99691c3e0a0a99c5a64538' }
+    let(:txid1) { "0x66734e70ea28eaa28eb1bace4ca87573c48f52cca7590459ad20dc58bae1a819" }
+    let(:txid2) { "0x7151f5b0d229c62a5076de4133ba06fffc033e25bf99691c3e0a0a99c5a64538" }
     let(:txids) { [txid1, txid2] }
 
     it "hashes the serialized full transaction" do
@@ -356,38 +356,38 @@ describe Eth::Tx, type: :model do
 
   describe "#data_hex" do
     it "converts the hex to binary and persists it" do
-      hex = '0123456789abcdef'
+      hex = "0123456789abcdef"
       binary = Eth::Utils.hex_to_bin hex
 
       expect {
         tx.data_hex = hex
       }.to change {
-        tx.data_bin
-      }.to(binary).and change {
-        tx.data_hex
-      }.to("0x#{hex}")
+             tx.data_bin
+           }.to(binary).and change {
+             tx.data_hex
+           }.to("0x#{hex}")
     end
   end
 
   describe "#data_bin" do
     it "returns the data in a binary format" do
-      hex = '0123456789abcdef'
+      hex = "0123456789abcdef"
       binary = Eth::Utils.hex_to_bin hex
 
       expect {
         tx.data_bin = binary
       }.to change {
-        tx.data_bin
-      }.to(binary).and change {
-        tx.data
-      }.to("0x#{hex}")
+             tx.data_bin
+           }.to(binary).and change {
+             tx.data
+           }.to("0x#{hex}")
     end
   end
 
   describe "#data" do
     after { configure_tx_data_hex }
 
-    let(:hex) { '0123456789abcdef' }
+    let(:hex) { "0123456789abcdef" }
     let(:binary) { Eth::Utils.hex_to_bin hex }
 
     context "when configured to use hex" do
@@ -397,10 +397,10 @@ describe Eth::Tx, type: :model do
         expect {
           tx.data = hex
         }.to change {
-          tx.data_bin
-        }.to(binary).and change {
-          tx.data_hex
-        }.to("0x#{hex}")
+               tx.data_bin
+             }.to(binary).and change {
+               tx.data_hex
+             }.to("0x#{hex}")
       end
     end
 
@@ -411,10 +411,10 @@ describe Eth::Tx, type: :model do
         expect {
           tx.data = binary
         }.to change {
-          tx.data_bin
-        }.to(binary).and change {
-          tx.data_hex
-        }.to("0x#{hex}")
+               tx.data_bin
+             }.to(binary).and change {
+               tx.data_hex
+             }.to("0x#{hex}")
       end
     end
   end

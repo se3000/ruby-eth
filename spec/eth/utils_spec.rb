@@ -2,7 +2,7 @@
 
 describe Eth::Utils, type: :model do
   describe ".int_to_base256" do
-    let(:hex) { '1c18f80381f0ef01e63617fc8eeda646bcef8dea61b34cf0aa079b48ec64e6e55d64d0398818a61bfdcf938e9aa175d16661ffa696629a6abc367a49fad3df90b8' }
+    let(:hex) { "1c18f80381f0ef01e63617fc8eeda646bcef8dea61b34cf0aa079b48ec64e6e55d64d0398818a61bfdcf938e9aa175d16661ffa696629a6abc367a49fad3df90b8" }
     let(:bin) { Eth::Utils.hex_to_bin hex }
     let(:int) { Eth::Utils.base256_to_int bin }
 
@@ -21,12 +21,12 @@ describe Eth::Utils, type: :model do
 
   describe ".prefix_hex" do
     it "ensures that a hex value has 0x at the beginning" do
-      expect(Eth::Utils.prefix_hex('abc')).to eq('0xabc')
-      expect(Eth::Utils.prefix_hex('0xabc')).to eq('0xabc')
+      expect(Eth::Utils.prefix_hex("abc")).to eq("0xabc")
+      expect(Eth::Utils.prefix_hex("0xabc")).to eq("0xabc")
     end
 
     it "does not reformat the hex or remove leading zeros" do
-      expect(Eth::Utils.prefix_hex('0123')).to eq('0x0123')
+      expect(Eth::Utils.prefix_hex("0123")).to eq("0x0123")
     end
   end
 
@@ -43,7 +43,7 @@ describe Eth::Utils, type: :model do
     it "properly hashes using" do
       value = "\xc5\xd2F\x01\x86\xf7#<\x92~}\xb2\xdc\xc7\x03\xc0\xe5\x00\xb6S\xca\x82';{\xfa\xd8\x04]\x85\xa4p"
 
-      expect(value). to eq(Eth::Utils.keccak256(''))
+      expect(value).to eq(Eth::Utils.keccak256(""))
     end
   end
 
@@ -54,17 +54,17 @@ describe Eth::Utils, type: :model do
       value3 = "\x1d\xccM\xe8\xde\xc7]z\xab\x85\xb5g\xb6\xcc\xd4\x1a\xd3\x12E\x1b\x94\x8at\x13\xf0\xa1B\xfd@\xd4\x93G"
       value4 = "YZ\xef\x85BA8\x89\x08?\x83\x13\x88\xcfv\x10\x0f\xd8a:\x97\xaf\xb8T\xdb#z#PF89"
 
-      expect(value1).to eq Eth::Utils.keccak256_rlp('')
+      expect(value1).to eq Eth::Utils.keccak256_rlp("")
       expect(value2).to eq Eth::Utils.keccak256_rlp(1)
       expect(value3).to eq Eth::Utils.keccak256_rlp([])
-      expect(value4).to eq Eth::Utils.keccak256_rlp([1, [2,3], "4", ["5", [6]]])
+      expect(value4).to eq Eth::Utils.keccak256_rlp([1, [2, 3], "4", ["5", [6]]])
     end
   end
 
   describe ".hex_to_bin" do
     it "raises an error when given invalid hex" do
       expect {
-        Eth::Utils.hex_to_bin('xxxx')
+        Eth::Utils.hex_to_bin("xxxx")
       }.to raise_error(TypeError)
 
       expect {

@@ -3,11 +3,11 @@ module Eth
     extend self
 
     def normalize_address(address)
-      if address.nil? || address == ''
-        ''
+      if address.nil? || address == ""
+        ""
       elsif address.size == 40
         hex_to_bin address
-      elsif address.size == 42 && address[0..1] == '0x'
+      elsif address.size == 42 && address[0..1] == "0x"
         hex_to_bin address[2..-1]
       else
         address
@@ -23,7 +23,7 @@ module Eth
     end
 
     def base256_to_int(str)
-      RLP::Sedes.big_endian_int.deserialize str.sub(/\A(\x00)+/, '')
+      RLP::Sedes.big_endian_int.deserialize str.sub(/\A(\x00)+/, "")
     end
 
     def int_to_base256(int)
@@ -43,7 +43,7 @@ module Eth
     end
 
     def remove_hex_prefix(s)
-      s[0,2] == '0x' ? s[2..-1] : s
+      s[0, 2] == "0x" ? s[2..-1] : s
     end
 
     def bin_to_prefixed_hex(binary)
@@ -89,14 +89,14 @@ module Eth
     end
 
     def zunpad(x)
-      x.sub(/\A\x00+/, '')
+      x.sub(/\A\x00+/, "")
     end
 
-    def zpad_int(n, l=32)
+    def zpad_int(n, l = 32)
       zpad encode_int(n), l
     end
 
-    def zpad_hex(s, l=32)
+    def zpad_hex(s, l = 32)
       zpad decode_hex(s), l
     end
 
@@ -107,8 +107,6 @@ module Eth
     def format_address(address)
       Address.new(address).checksummed
     end
-
-
 
     private
 
@@ -124,6 +122,5 @@ module Eth
 
       int_to_base256 n
     end
-
   end
 end

@@ -1,5 +1,5 @@
-require 'json'
-require 'securerandom'
+require "json"
+require "securerandom"
 
 class Eth::Key::Encrypter
   include Eth::Utils
@@ -48,7 +48,6 @@ class Eth::Key::Encrypter
     @id ||= options[:id] || SecureRandom.uuid
   end
 
-
   private
 
   attr_reader :derived_key, :encrypted_key, :key, :options
@@ -57,7 +56,7 @@ class Eth::Key::Encrypter
     @cipher ||= OpenSSL::Cipher.new(cipher_name).tap do |cipher|
       cipher.encrypt
       cipher.iv = iv
-      cipher.key = derived_key[0, (key_length/2)]
+      cipher.key = derived_key[0, (key_length / 2)]
     end
   end
 
@@ -74,7 +73,7 @@ class Eth::Key::Encrypter
   end
 
   def mac
-    keccak256(derived_key[(key_length/2), key_length] + encrypted_key)
+    keccak256(derived_key[(key_length / 2), key_length] + encrypted_key)
   end
 
   def cipher_name
@@ -107,22 +106,21 @@ class Eth::Key::Encrypter
 
   def salt
     @salt ||= if options[:salt]
-      hex_to_bin options[:salt]
-    else
-      SecureRandom.random_bytes(salt_length)
-    end
+        hex_to_bin options[:salt]
+      else
+        SecureRandom.random_bytes(salt_length)
+      end
   end
 
   def iv
     @iv ||= if options[:iv]
-      hex_to_bin options[:iv]
-    else
-      SecureRandom.random_bytes(iv_length)
-    end
+        hex_to_bin options[:iv]
+      else
+        SecureRandom.random_bytes(iv_length)
+      end
   end
 
   def address
     Eth::Key.new(priv: key).address
   end
-
 end
