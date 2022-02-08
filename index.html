@@ -58,13 +58,15 @@
       </div>
 
       <div id="content"><div id='filecontents'>
-<h1 id="label-Eth+for+Ruby">Eth for Ruby</h1>
+<h1 id="label-Ethereum+for+Ruby">Ethereum for Ruby</h1>
 
-<p><a href="https://github.com/se3000/ruby-eth/actions"><img src="https://img.shields.io/github/workflow/status/se3000/ruby-eth/Build"></a> <a href="https://github.com/se3000/ruby-eth/releases"><img src="https://img.shields.io/github/v/release/se3000/ruby-eth"></a> <a href="https://rubygems.org/gems/eth"><img src="https://img.shields.io/gem/v/eth"></a> <a href="https://rubygems.org/gems/eth"><img src="https://img.shields.io/gem/dt/eth"></a> <a href="https://github.com/se3000/ruby-eth/pulse"><img src="https://img.shields.io/github/languages/top/se3000/ruby-eth?color=red"></a> <a href="LICENSE"><img src="https://img.shields.io/github/license/se3000/ruby-eth"></a></p>
+<p><a href="https://github.com/q9f/eth.rb/actions"><img src="https://img.shields.io/github/workflow/status/q9f/eth.rb/Spec"></a> <a href="https://github.com/q9f/eth.rb/releases"><img src="https://img.shields.io/github/v/release/q9f/eth.rb"></a> <a href="https://rubygems.org/gems/eth"><img src="https://img.shields.io/gem/v/eth"></a> <a href="https://rubygems.org/gems/eth"><img src="https://img.shields.io/gem/dt/eth"></a> <a href="https://hits.seeyoufarm.com"><img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fq9f%2Feth.rb&count_bg=%2379C83D&title_bg=%23555555&icon=rubygems.svg&icon_color=%23FF0000&title=visitors&edge_flat=false"></a> <a href="https://codecov.io/gh/q9f/eth.rb"><img src="https://codecov.io/gh/q9f/eth.rb/branch/main/graph/badge.svg?token=IK7USBPBZY"></a> <a href="https://codeclimate.com/github/q9f/eth.rb/maintainability"><img src="https://api.codeclimate.com/v1/badges/469e6f66425198ad7614/maintainability"></a> <a href="https://github.com/q9f/eth.rb/pulse"><img src="https://img.shields.io/github/languages/top/q9f/eth.rb?color=red"></a> <a href="https://q9f.github.io/eth.rb"><img src="https://img.shields.io/badge/documentation-API-blue"></a> <a href="https://github.com/q9f/eth.rb/wiki"><img src="https://img.shields.io/badge/usage-WIKI-blue"></a> <a href="LICENSE"><img src="https://img.shields.io/github/license/q9f/eth.rb"></a> <a href="https://github.com/q9f/eth.rb/issues"><img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat"></a></p>
 
-<p>A simple library to build and sign Ethereum transactions. Allows separation of key and node management. Sign transactions and handle keys anywhere you can run ruby, broadcast transactions through any node.</p>
+<p>A straightforward library to build, sign, and broadcast Ethereum transactions. It allows the separation of key and node management. Sign transactions and handle keys anywhere you can run Ruby and broadcast transactions through any local or remote node. Sign messages and recover signatures for authentication.</p>
 
-<h2 id="label-Installation">Installation</h2>
+<p><strong>Note,</strong> this repository is just a long-term support branch of the minimally maintained <code>eth</code> gem version <code>~&gt; 0.4</code>. For the partial rewrite of version <code>~&gt; 0.5</code> see <a href="https://github.com/q9f/eth.rb/">q9f/eth.rb</a>.</p>
+
+<h2 id="label-Installation+~-3E+0.4">Installation <code>~&gt; 0.4</code></h2>
 
 <p>Add this line to your application&#39;s Gemfile:</p>
 
@@ -81,7 +83,7 @@
 <pre class="code ruby"><code class="ruby">$ gem install eth
 </code></pre>
 
-<h2 id="label-Usage">Usage</h2>
+<h2 id="label-Usage+~-3E+0.4">Usage <code>~&gt; 0.4</code></h2>
 
 <h3 id="label-Keys">Keys</h3>
 
@@ -108,7 +110,7 @@
 <pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_encrypted_key_info'>encrypted_key_info</span> <span class='op'>=</span> <span class='const'><span class='object_link'><a href="Eth.html" title="Eth (module)">Eth</a></span></span><span class='op'>::</span><span class='const'><span class='object_link'><a href="Eth/Key.html" title="Eth::Key (class)">Key</a></span></span><span class='period'>.</span><span class='id identifier rubyid_encrypt'><span class='object_link'><a href="Eth/Key.html#encrypt-class_method" title="Eth::Key.encrypt (method)">encrypt</a></span></span> <span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>p455w0rD</span><span class='tstring_end'>&#39;</span></span>
 </code></pre>
 
-<h3 id="label-Transactions">Transactions</h3>
+<h3 id="label-Transactions+~-3E+0.4">Transactions <code>~&gt; 0.4</code></h3>
 
 <p>Build a transaction from scratch:</p>
 
@@ -170,7 +172,7 @@
 
 <h2 id="label-Contributing">Contributing</h2>
 
-<p>Bug reports and pull requests are welcome on GitHub at <a href="https://github.com/se3000/ruby-eth">github.com/se3000/ruby-eth</a>. Tests are encouraged.</p>
+<p>Bug reports and pull requests are welcome on GitHub at <a href="https://github.com/q9f/eth.rb/">github.com/q9f/eth.rb</a>. Tests are encouraged.</p>
 
 <h3 id="label-Tests">Tests</h3>
 
@@ -186,20 +188,11 @@
 
 <h2 id="label-License">License</h2>
 
-<p>The gem is available as open-source software under the terms of the <a href="http://opensource.org/licenses/MIT">MIT License</a>.</p>
-
-<h2 id="label-TODO">TODO</h2>
-<ul><li>
-<p>Better test suite.</p>
-</li><li>
-<p>Expose API for HD keys.</p>
-</li><li>
-<p>Support signing with <a href="https://github.com/bitcoin-core/secp256k1">libsecp256k1</a>.</p>
-</li></ul>
+<p>The gem version <code>~&gt; 0.4</code> is available as open-source software under the terms of the <a href="http://opensource.org/licenses/MIT">MIT License</a>.</p>
 </div></div>
 
       <div id="footer">
-  Generated on Tue Jan  4 13:34:02 2022 by
+  Generated on Tue Feb  8 14:05:31 2022 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.27 (ruby-2.7.5).
 </div>
