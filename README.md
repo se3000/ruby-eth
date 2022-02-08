@@ -1,14 +1,23 @@
-# Eth for Ruby
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/se3000/ruby-eth/Build)](https://github.com/se3000/ruby-eth/actions)
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/se3000/ruby-eth)](https://github.com/se3000/ruby-eth/releases)
+# Ethereum for Ruby
+
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/q9f/eth.rb/Spec)](https://github.com/q9f/eth.rb/actions)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/q9f/eth.rb)](https://github.com/q9f/eth.rb/releases)
 [![Gem](https://img.shields.io/gem/v/eth)](https://rubygems.org/gems/eth)
 [![Gem](https://img.shields.io/gem/dt/eth)](https://rubygems.org/gems/eth)
-[![GitHub top language](https://img.shields.io/github/languages/top/se3000/ruby-eth?color=red)](https://github.com/se3000/ruby-eth/pulse)
-[![GitHub](https://img.shields.io/github/license/se3000/ruby-eth)](LICENSE)
+[![Visitors](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fq9f%2Feth.rb&count_bg=%2379C83D&title_bg=%23555555&icon=rubygems.svg&icon_color=%23FF0000&title=visitors&edge_flat=false)](https://hits.seeyoufarm.com)
+[![codecov](https://codecov.io/gh/q9f/eth.rb/branch/main/graph/badge.svg?token=IK7USBPBZY)](https://codecov.io/gh/q9f/eth.rb)
+[![Maintainability](https://api.codeclimate.com/v1/badges/469e6f66425198ad7614/maintainability)](https://codeclimate.com/github/q9f/eth.rb/maintainability)
+[![Top Language](https://img.shields.io/github/languages/top/q9f/eth.rb?color=red)](https://github.com/q9f/eth.rb/pulse)
+[![Yard Doc API](https://img.shields.io/badge/documentation-API-blue)](https://q9f.github.io/eth.rb)
+[![Usage Wiki](https://img.shields.io/badge/usage-WIKI-blue)](https://github.com/q9f/eth.rb/wiki)
+[![Open-Source License](https://img.shields.io/github/license/q9f/eth.rb)](LICENSE)
+[![Contributions Welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/q9f/eth.rb/issues)
 
-A simple library to build and sign Ethereum transactions. Allows separation of key and node management. Sign transactions and handle keys anywhere you can run ruby, broadcast transactions through any node.
+A straightforward library to build, sign, and broadcast Ethereum transactions. It allows the separation of key and node management. Sign transactions and handle keys anywhere you can run Ruby and broadcast transactions through any local or remote node. Sign messages and recover signatures for authentication.
 
-## Installation
+**Note,** this repository is just a long-term support branch of the minimally maintained `eth` gem version `~> 0.4`. For the partial rewrite of version `~> 0.5` see [q9f/eth.rb](https://github.com/q9f/eth.rb/).
+
+## Installation `~> 0.4`
 
 Add this line to your application's Gemfile:
 
@@ -24,7 +33,7 @@ Or install it yourself as:
 
     $ gem install eth
 
-## Usage
+## Usage `~> 0.4`
 
 ### Keys
 
@@ -55,7 +64,7 @@ You can also encrypt your keys for use with other ethereum libraries:
 encrypted_key_info = Eth::Key.encrypt key, 'p455w0rD'
 ```
 
-### Transactions
+### Transactions `~> 0.4`
 
 Build a transaction from scratch:
 
@@ -124,7 +133,7 @@ end
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/se3000/ruby-eth. Tests are encouraged.
+Bug reports and pull requests are welcome on GitHub at [github.com/q9f/eth.rb](https://github.com/q9f/eth.rb/). Tests are encouraged.
 
 ### Tests
 
@@ -142,10 +151,4 @@ rspec
 
 ## License
 
-The gem is available as open-source software under the terms of the [MIT License](http://opensource.org/licenses/MIT).
-
-## TODO
-
-* Better test suite.
-* Expose API for HD keys.
-* Support signing with [libsecp256k1](https://github.com/bitcoin-core/secp256k1).
+The gem version `~> 0.4` is available as open-source software under the terms of the [MIT License](http://opensource.org/licenses/MIT).
